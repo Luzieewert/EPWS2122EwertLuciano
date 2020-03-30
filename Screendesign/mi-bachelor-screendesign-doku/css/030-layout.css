@@ -1,0 +1,88 @@
+/*----------------------------------------------------------------------------
+layout.css                                                                  
+Enthält alle Regeln zum Layout.  
+
+@media (min-width:600px) { }
+@media (min-width:801px) { }
+@media (min-width:1025px) {  }
+@media (min-width:1281px) { }
+----------------------------------------------------------------------------*/
+
+
+
+/* Main Header
+-----------------------------------------------------------------------------*/
+
+#l-mainHeader{
+  padding: var(--l);
+  padding-bottom: var(--xxl);
+  background: var(--color-background-dark);
+  color: var(--color-backgrounds);
+  margin-bottom: var(--xl);
+}
+
+/*
+.l-mainHeader-title{
+  margin-bottom: var(--xxl);
+  border-bottom: solid 1px var(--color-text-light);
+  margin-bottom: var(--xxxl);
+  padding-bottom: var(--xxl);
+}
+*/
+
+#l-mainHeader .m-portfolioItem-title,
+#l-mainHeader .m-portfolioItem-subtitle{
+  color: var(--color-backgrounds);
+}
+
+@media screen and (min-width:1281px) {
+  #l-mainHeader > *{
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #l-mainHeader{
+    margin-bottom: var(--xxxl);
+  }
+}
+
+
+
+/* Main Footer
+-----------------------------------------------------------------------------*/
+
+#l-mainFooter{
+  padding: var(--l);
+  border-top: solid 1px var(--color-borders);
+  margin-top: var(--xl);
+  color: var(--color-text-light);
+}
+
+@media screen and (min-width:1281px) {
+  #l-mainFooter {
+    width: 1200px;
+    margin: auto;
+    padding: 0;
+    padding-bottom: var(--l);
+  }
+}
+
+
+/* Main Content
+-----------------------------------------------------------------------------*/
+
+#l-mainContent{
+  padding: var(--l);
+}
+
+@media screen and (min-width:1281px) {
+  #l-mainContent {
+    width: 1200px;
+    margin: auto;
+    padding: 0;
+  }
+}
+
+
+
