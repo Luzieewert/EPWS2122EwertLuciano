@@ -26,23 +26,23 @@ int telnet(int sockfd) {
         bzero(eingabetext, sizeof(eingabetext));
         n = 0;
 
-        if (strcmp(eingabetext, "put") == 0) {
-            char key = "moin";
-            char value = "was geht";
-
-            write(sockfd, put(key, value), sizeof(put(key, value)));
-        }
-        if (strcmp(eingabetext, "get") == 0) {
-            komplette_liste();
-        }
-
         while ((eingabetext[n++] = getchar()) != '\n');
-
         write(sockfd, eingabetext, sizeof(eingabetext));
         bzero(eingabetext, sizeof(eingabetext));
         read(sockfd, eingabetext, sizeof(eingabetext));
         printf("From Server: %s", eingabetext);
 
+        if (strcmp(eingabetext, "put") == 0) {
+            char *key = "key1";
+            char *value = "was geht";
+            int *x = put(key, value);
+            write(sockfd, *x, sizeof(put(key, value)));
+        }
+        if (strcmp(eingabetext, "get") == 0) {
+            komplette_liste();
+            break;
+
+        }
 
         if (strncmp(eingabetext, "exit", 4) == 0) {
             printf("Server Exit...\n");
@@ -70,7 +70,7 @@ int client() {
     server_address.sin_port = htons(PORT);
     server_address.sin_addr.s_addr = INADDR_ANY;
 
-    printf("%d", sockfd);
+//    printf("%d", sockfd);
 
     int connection_status = connect(sockfd, (struct sockaddr *) &server_address, sizeof(server_address));
 
@@ -83,7 +83,7 @@ int client() {
 
 //    telnet(sockfd);
 
-    close(sockfd);
+//    close(sockfd);
 
     return sockfd;
 }
