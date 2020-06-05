@@ -122,7 +122,7 @@ void komplette_liste() {
     while (zeiger != NULL) {
         zeiger1 = zeiger->next;
         printf("key: %s value: %s\n", zeiger->key, zeiger->value);
-        zeiger = zeiger1;
+        zeiger = zeiger1; 
     }
 
 }
