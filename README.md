@@ -2,7 +2,7 @@
 
 Problemraum: 
 
-Die Preise für Nahverkehrs- Ticktes steigen stetig. Eine Bus- oder Bahnfahrt kostet in Köln bis zu 2€ aufwärts. Ein Monatsticket kostet allerdings um die 60€. Für regelmäßige ÖPNV Nutzer ist dies keine sehr günstige Alternative sich fortzubewegen. 
+Die Preise für Nahverkehrs- Ticktes steigen stetig. Eine Bus- oder Bahnfahrt kostet in Köln bis zu 3€ aufwärts. Ein Monatsticket kostet allerdings um die 60€. Für regelmäßige ÖPNV Nutzer ist dies keine sehr günstige Alternative sich fortzubewegen. 
 Für Gruppen gibt es bereits Reduzierungen im Preis, wenn diese sich ein Gruppenticket leisten. Allerdings sind diese meist auf einen bestimmte Anzahl an Leuten festgelegt, wodurch zum Beispiel eine Gruppe von drei Leuten für ein 4er- Ticket nicht in Frage käme.
 
 Zielsetzung/Vision:
