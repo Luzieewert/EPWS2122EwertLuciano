@@ -1,25 +1,48 @@
-import React, {FC} from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import HomeScreen from './screens/home/HomeScreen';
+import LoginScreen from './screens/login/LoginScreen';
+import RegistrationScreen from './screens/registration/RegistrationScreen';
+import PlaceholderScreen from './screens/placeholder/PlaceholderScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
-const App: () => Node = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          options={{
-            title: 'TicketFor2',
-            headerTitleAlign: 'center',
-          }}
-          name="Home"
-          component={HomeScreen}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+const App = () => {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator>
+
+                <Stack.Screen
+                    options={{
+                        title: 'Login',
+                        headerTitleAlign: 'center',
+                    }}
+                    name="Login"
+                    component={LoginScreen}/>
+                <Stack.Screen
+                    options={{
+                        title: 'Registration',
+                        headerTitleAlign: 'center',
+                    }}
+                    name="Registration"
+                    component={RegistrationScreen}
+                />
+
+                <Stack.Screen
+                    options={{
+                        title: 'Placeholder',
+                        headerTitleAlign: 'center',
+                    }}
+                    name="Placeholder"
+                    component={PlaceholderScreen}
+                />
+
+            </Stack.Navigator>
+        </NavigationContainer>
+
+
+    );
 };
+
 
 export default App;
