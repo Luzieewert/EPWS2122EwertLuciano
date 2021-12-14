@@ -24,12 +24,12 @@ const handleRegistrationPress = (navigation) => {
 const LoginScreen = () => {
     const navigation = useNavigation();
     const [loginData, setLoginData] = useState({})
-    const [setUser] = useContext(UserContext)
-
-    const handleLogin = async (data, navigation) => {
+    const [user, setUser] = useContext(UserContext)
+    const handleLogin = async (data) => {
         await axios.post('http://localhost:8001/TicketFor2/login', data)
             .then((res) => {
                 setUser(res.data.user)
+                navigation.reset({index: 0, routes: [{name: 'Placeholder'}]})
                 navigation.navigate('Placeholder')
             })
             .catch((err) => {
@@ -57,7 +57,7 @@ const LoginScreen = () => {
 
 
             <LoginButton buttonText="Anmelden" buttonStyle={BUTTON} textStyle={{color: 'white'}}
-                         onPress={() => handleLogin(loginData, navigation)}/>
+                         onPress={() => handleLogin(loginData)}/>
 
             <LoginButton buttonText="Registrieren" buttonStyle={BUTTON} textStyle={{color: 'white'}}
                          onPress={() => handleRegistrationPress(navigation)}/>
