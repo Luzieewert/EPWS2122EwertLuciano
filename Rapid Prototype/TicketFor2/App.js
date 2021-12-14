@@ -4,14 +4,15 @@ import LoginScreen from './screens/login/LoginScreen';
 import RegistrationScreen from './screens/registration/RegistrationScreen';
 import PlaceholderScreen from './screens/placeholder/PlaceholderScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {UserProvider} from "./contexts/UserContext";
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
     return (
         <NavigationContainer>
+            <UserProvider>
             <Stack.Navigator>
-
                 <Stack.Screen
                     options={{
                         title: 'Login',
@@ -38,6 +39,7 @@ const App = () => {
                 />
 
             </Stack.Navigator>
+            </UserProvider>
         </NavigationContainer>
 
 
