@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
-import {Text, View, TouchableOpacity, TextInput, Button} from 'react-native';
+import React, {useContext, useState} from 'react';
+import { View, TextInput } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import LoginButton from "./LoginButton";
 import axios from "axios";
+import {UserContext} from "../../contexts/UserContext";
 
 
 const BUTTON = {
@@ -14,16 +15,7 @@ const BUTTON = {
     marginBottom: 8
 }
 const TEXTINPUT = {borderRadius: 5, borderWidth: 1, borderColor: "black", marginBottom: 7}
-const handleLogin = async (data,navigation) => {
-    await axios.post('http://localhost:8001/TicketFor2/login', data)
-        .then((res) => {
-            navigation.navigate('Placeholder', {user: res.data.user})
-        })
-        .catch((err) => {
-            console.log(err);
-        });
 
-};
 
 const handleRegistrationPress = (navigation) => {
     navigation.navigate('Registration')
@@ -32,6 +24,19 @@ const handleRegistrationPress = (navigation) => {
 const LoginScreen = () => {
     const navigation = useNavigation();
     const [loginData, setLoginData] = useState({})
+    const [user, setUser] = useContext(UserContext)
+    const handleLogin = async (data) => {
+        await axios.post('http://localhost:8001/TicketFor2/login', data)
+            .then((res) => {
+                setUser(res.data.user)
+                navigation.reset({index: 0, routes: [{name: 'Placeholder'}]})
+                navigation.navigate('Placeholder')
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    };
 
     return (
         <View style={{paddingHorizontal: 8}}>
@@ -52,7 +57,7 @@ const LoginScreen = () => {
 
 
             <LoginButton buttonText="Anmelden" buttonStyle={BUTTON} textStyle={{color: 'white'}}
-                         onPress={() => handleLogin(loginData, navigation)}/>
+                         onPress={() => handleLogin(loginData)}/>
 
             <LoginButton buttonText="Registrieren" buttonStyle={BUTTON} textStyle={{color: 'white'}}
                          onPress={() => handleRegistrationPress(navigation)}/>
