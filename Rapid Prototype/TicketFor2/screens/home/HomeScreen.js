@@ -1,12 +1,15 @@
-import React, {FC} from 'react';
-import {Text, View} from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-interface Props {}
 
-const HomeScreen: FC<Props> = props => {
+const HomeScreen = () => {
+    const navigation = useNavigation();
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Work in Progress.. </Text>
+      <TouchableOpacity onPress={() => navigation.navigate('MapScreen')}>
+
+          </TouchableOpacity>
     </View>
   );
 };
