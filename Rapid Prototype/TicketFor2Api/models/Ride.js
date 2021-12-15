@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const User = require("../models/Users");
 
 const RideSchema = new mongoose.Schema(
     {
@@ -20,11 +19,11 @@ const RideSchema = new mongoose.Schema(
         },
 
         ride_giver: {
-          type: User
+          type: Object
         },
 
         ride_taker: {
-            type: User
+            type: Object
         },
 
         ride_status: {
