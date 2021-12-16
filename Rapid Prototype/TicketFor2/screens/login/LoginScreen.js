@@ -29,8 +29,8 @@ const LoginScreen = () => {
         await axios.post('http://localhost:8001/TicketFor2/login', data)
             .then((res) => {
                 setUser(res.data.user)
-                navigation.reset({index: 0, routes: [{name: 'Placeholder'}]})
-                navigation.navigate('Placeholder')
+                navigation.reset({index: 0, routes: [{name: 'Map'}]})
+                navigation.navigate('Map')
             })
             .catch((err) => {
                 console.log(err);
