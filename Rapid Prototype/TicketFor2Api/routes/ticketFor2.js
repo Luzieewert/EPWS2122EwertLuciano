@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const passport = require("passport");
+const {getRides, createRide, updateRide} = require("../controllers/ride");
 
 
 router.post("/signup", (req, res, next) => {
@@ -28,7 +29,7 @@ router.post("/login", (req, res, next) => {
             if (err) {
                 return res.status(400).json({ errors: err });
             }
-            return res.status(200).json({ success: `logged in ${user.id}` });
+            return res.status(200).json({ user: user });
         });
     })(req, res, next);
 });
@@ -45,6 +46,12 @@ function isLoggedIn(req, res, next) {
 
     return res.status(400).json({message: "You need to be logged in"})
 }
+
+// Rides
+
+router.get('/rides', isLoggedIn, getRides);
+router.post('/ride', isLoggedIn, createRide);
+router.put('/ride/:id', isLoggedIn, updateRide);
 
 
 
