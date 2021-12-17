@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View} from 'react-native';
+import {PermissionsAndroid, StyleSheet, View} from 'react-native';
 import MapView, { Marker} from 'react-native-maps';
 
 const styles = StyleSheet.create({
@@ -11,14 +11,21 @@ const styles = StyleSheet.create({
     },
 });
 
+const askForLocation = () => {
+    PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+    ).then(granted => {
+        console.log(granted) // just to ensure that permissions were granted
+    });
+}
+
 const initialState = {
-    latitude: 50.929102,
-    longitude: 6.941422,
+    latitude: 50.929027,
+    longitude: 6.941914,
     latitudeDelta: 0.00375,
     longitudeDelta: 0.00521,
 
 }
-
 
 const MapScreen = () => {
     return (
@@ -26,6 +33,8 @@ const MapScreen = () => {
             <MapView
                 style={styles.map}
                 initialRegion={initialState}
+                showsUserLocation={true}
+                onMapReady={askForLocation}
             >
 
                 <Marker
