@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Text, TextInput, View} from 'react-native';
-import LoginButton from "../login/LoginButton";
+import GenericButton from "../components/GenericButton";
 import CheckBox from '@react-native-community/checkbox';
 import {useNavigation} from '@react-navigation/native';
 import axios from "axios";
@@ -58,7 +58,7 @@ const RegistrationScreen = () => {
             />
             <Text style={{color: "black"}}>Ich besitze ein Ticket</Text>
         </View>
-        <LoginButton buttonText="Jetzt registrieren" buttonStyle={BUTTON} textStyle={{color: 'white'}} onPress={ () => handleRegistration(registrationData, navigation)} />
+        <GenericButton buttonText="Jetzt registrieren" buttonStyle={BUTTON} textStyle={{color: 'white'}} onPress={ () => handleRegistration(registrationData, navigation)} />
     </View>
 
   );

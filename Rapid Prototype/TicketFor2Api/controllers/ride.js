@@ -8,7 +8,7 @@ const createRide = ((req,res) => {
     const newRide = new Ride({...req.body})
     newRide.save()
         .then((ride) => {
-            return res.status(200).json({ success: `Ride Created ${ride}` });
+            return res.status(200).json({ ride: ride });
         })
         .catch(err => {
             return console.log(err)

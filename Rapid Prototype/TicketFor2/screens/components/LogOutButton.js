@@ -3,17 +3,22 @@ import {Text, TouchableOpacity} from "react-native"
 import {useNavigation} from "@react-navigation/native";
 import axios from "axios";
 import {UserContext} from "../../contexts/UserContext";
+import {RideContext} from "../../contexts/RideContext";
 
 
 const LogOutButton = () => {
     const navigation = useNavigation()
     const [user, setUser] = useContext(UserContext)
+    const [ride, setRide] = useContext(RideContext)
+
 
 
     const handleLogOut = async () => {
         await axios.get('http://localhost:8001/TicketFor2/logout')
             .then(() => {
                 setUser({})
+                setRide({})
+
                 navigation.reset({index: 0, routes: [{name: 'Login'}]})
                 navigation.navigate('Login')
             })

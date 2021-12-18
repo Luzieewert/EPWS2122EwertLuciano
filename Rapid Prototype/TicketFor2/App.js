@@ -6,8 +6,8 @@ import PlaceholderScreen from './screens/placeholder/PlaceholderScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MapScreen from "./screens/Map/MapScreen";
 import {UserProvider} from "./contexts/UserContext";
-import {Button} from "react-native";
 import LogOutButton from "./screens/components/LogOutButton";
+import {RideProvider} from "./contexts/RideContext";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +15,7 @@ const App = () => {
   return (
     <NavigationContainer>
         <UserProvider>
+            <RideProvider>
       <Stack.Navigator>
           <Stack.Screen
               options={{
@@ -51,6 +52,7 @@ const App = () => {
               component={PlaceholderScreen}
           />
       </Stack.Navigator>
+            </RideProvider>
         </UserProvider>
     </NavigationContainer>
   );

@@ -37,7 +37,7 @@ const RideSchema = new mongoose.Schema(
 
         ride_status: {
             type: String,
-            default: "0"
+            default: "Created"
         },
 
         date: {
