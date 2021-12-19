@@ -8,6 +8,8 @@ import MapScreen from "./screens/Map/MapScreen";
 import {UserProvider} from "./contexts/UserContext";
 import {Button} from "react-native";
 import LogOutButton from "./screens/components/LogOutButton";
+import ChatScreen from "./screens/chat/ChatScreen";
+import ChatScreenFallback from "./screens/chat/ChatScreenFallback";
 
 const Stack = createNativeStackNavigator();
 
@@ -44,11 +46,19 @@ const App = () => {
           />
           <Stack.Screen
               options={{
-                  title: 'Placeholder',
+                  title: 'Chat',
                   headerTitleAlign: 'center',
               }}
-              name="Placeholder"
-              component={PlaceholderScreen}
+              name="Chat"
+              component={ChatScreen}
+          />
+          <Stack.Screen
+              options={{
+                  title: 'Chat',
+                  headerTitleAlign: 'center',
+              }}
+              name="ChatFallback"
+              component={ChatScreenFallback}
           />
       </Stack.Navigator>
         </UserProvider>
