@@ -1,11 +1,13 @@
 # Start API
 * Install MongoDb
+* cd Rapid Prototype/TicketFor2Api
 * Install dependencies (yarn install || npm install)
 * Run Server yarn (devStart || npm run devStart)
 
 # Start App(Android)
 * Install React Native CLI
 * Setup an Emulator
+* cd Rapid Prototype/TicketFor2
 * Install dependencies (yarn install || npm install)
 * Start Metro (yarn start || npm run start)
 * Run Android (yarn android || npm run android)
