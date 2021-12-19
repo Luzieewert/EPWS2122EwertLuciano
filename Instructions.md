@@ -1,9 +1,9 @@
-#Start API
+# Start API
 * Install MongoDb
 * Install dependencies (yarn install || npm install)
 * Run Server yarn (devStart || npm run devStart)
 
-#Start App(Android)
+# Start App(Android)
 * Install React Native CLI
 * Setup an Emulator
 * Install dependencies (yarn install || npm install)
@@ -11,7 +11,7 @@
 * Run Android (yarn android || npm run android)
 
 
-#Connect Api on Localhost
+# Connect Api on Localhost
 ***One Emulator:***
 
 adb reverse tcp:PORT tcp:PORT
@@ -21,6 +21,7 @@ adb reverse tcp:PORT tcp:PORT
 adb -s emulator1 reverse tcp:8001 tcp:8001
 adb -s emulator2 reverse tcp:8001 tcp:8001
 
-#Change Emulator Geolocation
+# Change Emulator Geolocation
 
 adb emu geo fix longitude latitude
+ ***or*** adb -s emulatorname emu geo fix longitude latitude
