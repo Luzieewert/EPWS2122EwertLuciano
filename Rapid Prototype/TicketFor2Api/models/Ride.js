@@ -2,12 +2,21 @@ const mongoose = require("mongoose");
 
 const RideSchema = new mongoose.Schema(
     {
-        start_station: {
+        start_station_name: {
             type: String
         },
 
-        end_station: {
+        start_station_cords: {
+            type: Object
+        },
+
+
+        end_station_name: {
             type: String
+        },
+
+        end_station_cords: {
+            type: Object
         },
 
         ride_start: {
@@ -28,7 +37,7 @@ const RideSchema = new mongoose.Schema(
 
         ride_status: {
             type: String,
-            default: "0"
+            default: "Created"
         },
 
         date: {

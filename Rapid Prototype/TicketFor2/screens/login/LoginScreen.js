@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import { View, TextInput } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import LoginButton from "./LoginButton";
+import GenericButton from "../components/GenericButton";
 import axios from "axios";
 import {UserContext} from "../../contexts/UserContext";
 
@@ -56,11 +56,11 @@ const LoginScreen = () => {
             />
 
 
-            <LoginButton buttonText="Anmelden" buttonStyle={BUTTON} textStyle={{color: 'white'}}
-                         onPress={() => handleLogin(loginData)}/>
+            <GenericButton buttonText="Anmelden" buttonStyle={BUTTON} textStyle={{color: 'white'}}
+                           onPress={() => handleLogin(loginData)}/>
 
-            <LoginButton buttonText="Registrieren" buttonStyle={BUTTON} textStyle={{color: 'white'}}
-                         onPress={() => handleRegistrationPress(navigation)}/>
+            <GenericButton buttonText="Registrieren" buttonStyle={BUTTON} textStyle={{color: 'white'}}
+                           onPress={() => handleRegistrationPress(navigation)}/>
 
         </View>
 

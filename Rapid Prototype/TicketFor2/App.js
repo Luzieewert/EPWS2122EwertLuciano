@@ -6,10 +6,11 @@ import PlaceholderScreen from './screens/placeholder/PlaceholderScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MapScreen from "./screens/Map/MapScreen";
 import {UserProvider} from "./contexts/UserContext";
-import {Button} from "react-native";
 import LogOutButton from "./screens/components/LogOutButton";
-import ChatScreen from "./screens/chat/ChatScreen";
+import {RideProvider} from "./contexts/RideContext";
 import ChatScreenFallback from "./screens/chat/ChatScreenFallback";
+import RideScreen from "./screens/ride/RideScreen";
+import PostRideScreen from "./screens/post-ride/PostRideScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ const App = () => {
   return (
     <NavigationContainer>
         <UserProvider>
+            <RideProvider>
       <Stack.Navigator>
           <Stack.Screen
               options={{
@@ -38,6 +40,16 @@ const App = () => {
 
           <Stack.Screen
               options={{
+                  title: 'Ride',
+                  headerTitleAlign: 'center',
+                  headerRight: LogOutButton
+              }}
+              name="Ride"
+              component={RideScreen}
+          />
+
+          <Stack.Screen
+              options={{
                   title: 'Registration',
                   headerTitleAlign: 'center',
               }}
@@ -46,11 +58,11 @@ const App = () => {
           />
           <Stack.Screen
               options={{
-                  title: 'Chat',
+                  title: 'Placeholder',
                   headerTitleAlign: 'center',
               }}
-              name="Chat"
-              component={ChatScreen}
+              name="Placeholder"
+              component={PlaceholderScreen}
           />
           <Stack.Screen
               options={{
@@ -60,7 +72,17 @@ const App = () => {
               name="ChatFallback"
               component={ChatScreenFallback}
           />
+
+          <Stack.Screen
+              options={{
+                  title: 'After Party',
+                  headerTitleAlign: 'center',
+              }}
+              name="PostRide"
+              component={PostRideScreen}
+          />
       </Stack.Navigator>
+            </RideProvider>
         </UserProvider>
     </NavigationContainer>
   );
