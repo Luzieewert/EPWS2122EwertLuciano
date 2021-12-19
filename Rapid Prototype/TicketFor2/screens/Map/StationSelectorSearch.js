@@ -119,6 +119,7 @@ const StationSelectorSearch = ({lines, onClose , handleRideCreationSuccess}) => 
 
     const selectEndStation = (station) => {
         setRideObj((prev) => {
+            console.log(prev)
             return {
                 ...prev,
                 ...{
@@ -148,7 +149,7 @@ const StationSelectorSearch = ({lines, onClose , handleRideCreationSuccess}) => 
                                                                               onPress={() => selectEndStation(station)}/>)}
             </ScrollView>}
             {step === 3 && <View style={CREATEBUTTONVIEW}>
-                <GenericButton onPress={()=>updateRide(rideObj)} buttonStyle={CREATEBUTTON} buttonText="Fahrt erstellen"
+                <GenericButton onPress={()=>updateRide(rideObj)} buttonStyle={CREATEBUTTON} buttonText="Fahrt anfragen"
                                textStyle={CREATEBUTTONTEXT}/>
             </View>}
             <GenericButton onPress={onClose} buttonStyle={CLOSEBUTTON} textStyle={CLOSEBUTTONTEXT} buttonText="X"/>

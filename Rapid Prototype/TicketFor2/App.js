@@ -9,6 +9,8 @@ import {UserProvider} from "./contexts/UserContext";
 import LogOutButton from "./screens/components/LogOutButton";
 import {RideProvider} from "./contexts/RideContext";
 import ChatScreenFallback from "./screens/chat/ChatScreenFallback";
+import RideScreen from "./screens/ride/RideScreen";
+import PostRideScreen from "./screens/post-ride/PostRideScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,7 +45,7 @@ const App = () => {
                   headerRight: LogOutButton
               }}
               name="Ride"
-              component={PlaceholderScreen}
+              component={RideScreen}
           />
 
           <Stack.Screen
@@ -69,6 +71,15 @@ const App = () => {
               }}
               name="ChatFallback"
               component={ChatScreenFallback}
+          />
+
+          <Stack.Screen
+              options={{
+                  title: 'After Party',
+                  headerTitleAlign: 'center',
+              }}
+              name="PostRide"
+              component={PostRideScreen}
           />
       </Stack.Navigator>
             </RideProvider>

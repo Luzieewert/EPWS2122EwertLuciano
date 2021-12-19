@@ -1,8 +1,6 @@
 import React from "react"
 import {Text, View} from "react-native";
 import GenericButton from "../components/GenericButton";
-import axios from "axios";
-import {RideContext} from "../../contexts/RideContext";
 
 const RIDECONFIRMATION = {
     position: "absolute",
@@ -45,7 +43,7 @@ const RideConfirmation = ({taker, handleConfirmation}) => {
     return (
         <View style={RIDECONFIRMATION}>
             <View style={INNERCONTAINER}>
-            <Text style={TEXTSTYLE}> möchte mit dir fahren :)</Text>
+            <Text style={TEXTSTYLE}> {taker?.name} {taker?.last_name} möchte mit dir fahren.</Text>
             <View style={BUTTONSCONTAINER}><GenericButton onPress={() => handleConfirmation(true)} buttonStyle={BUTTON} buttonText="Annehmen" textStyle={TEXTSTYLE}/><GenericButton
               buttonStyle={BUTTON} onPress={() => handleConfirmation(false)}  buttonText="Ablehnen" textStyle={TEXTSTYLE}/></View>
             </View>

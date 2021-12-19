@@ -12,7 +12,7 @@ const getRide = ((req,res) => {
 })
 
 const getRideByStation = ((req,res) => {
-    Ride.findOne({start_station_name: req.params.station},null,null,(err,result) => {
+    Ride.findOne({start_station_name: req.params.station},null,{sort: {date: -1}},(err,result) => {
         if(err) res.send(err)
         else res.send(result)
     })

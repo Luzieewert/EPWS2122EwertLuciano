@@ -175,7 +175,7 @@ const MapScreen = () => {
 
 
     useEffect(() => {
-        if (ride) {
+        if (Object.keys(ride).length > 0) {
             const handle = setInterval(() => getCurrentRide(ride._id), 5000)
             return () => {
                 clearInterval(handle)
@@ -189,8 +189,8 @@ const MapScreen = () => {
 
     useEffect(()=> {
         if(ride && ride.ride_status === "Started"){
+            setShowCreateButton(user.has_ticket === true)
             navigation.reset({index: 0, routes: [{name: 'Ride'}]})
-            navigation.navigate('Ride')
         }
     },[ride?.ride_status])
 
@@ -285,6 +285,7 @@ const MapScreen = () => {
                        title={ride.start_station_name + " " + "(" + ride.ride_status + ")"}
                        pinColor={markerStatusMap[ride.ride_status]}/>
     }
+
     return (
         <View style={styles.container}>
             <MapView
@@ -295,7 +296,7 @@ const MapScreen = () => {
             >
                 {showRides && renderMarkers()}
                 {showRidesSearcher && renderMarkersSearch()}
-                {ride && renderCurrentRideMarker()}
+                {Object.keys(ride).length > 0 && renderCurrentRideMarker()}
             </MapView>
             {showCreateButton && <GenericButton onPress={searchForRides}
                                                 buttonStyle={RIDECREATIONBUTTON}
@@ -313,12 +314,7 @@ const MapScreen = () => {
                                                      onClose={closeStationSelectorSearch}/>}
             {showConfirmation && <RideConfirmation handleConfirmation={handleConfirmation} taker={ride?.ride_taker}/>}
 
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("ChatFallback")}>
 
-                <Text style = {styles.buttonText}>
-                    Chat
-                </Text>
-            </TouchableOpacity>
         </View>
     );
 }
