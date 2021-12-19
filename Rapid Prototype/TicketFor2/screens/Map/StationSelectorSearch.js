@@ -78,29 +78,43 @@ const CLOSEBUTTONTEXT = {
 }
 
 
-const StationSelector = ({lines, onClose , handleRideCreationSuccess}) => {
+const StationSelectorSearch = ({lines, onClose , handleRideCreationSuccess}) => {
     const [ride, setRide] = useContext(RideContext)
     const [user, setUser] = useContext(UserContext)
     const [step, setStep] = useState(1)
     const [selectedLine, setSelectedLine] = useState()
     const [rideObj, setRideObj] = useState({})
 
-    const createRide = async (rideData) => {
-        await axios.post('http://localhost:8001/TicketFor2/ride', rideData)
+    const getCurrentRideStation = async (rideStation) => {
+        await axios.get('http://localhost:8001/TicketFor2/rideByStation/' + rideStation)
             .then((res) => {
-                const newRide = res.data.ride
+                const newRide = res.data
                 setRide(newRide)
-               handleRideCreationSuccess()
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    const updateRide = async (rideData) => {
+        await axios.put('http://localhost:8001/TicketFor2/ride/' + ride._id, rideData)
+            .then((res) => {
+                const newRide = res.data
+                setRide(newRide)
+                handleRideCreationSuccess()
             })
             .catch((err) => {
                 console.log(err);
             });
     };
 
+
+
     const selectLine = (line) => {
         setRideObj({start_station_name: line.name})
         setStep(2)
         setSelectedLine(line)
+        getCurrentRideStation("12 (Zollstock Südfriedhof)").then()
     }
 
     const selectEndStation = (station) => {
@@ -109,7 +123,8 @@ const StationSelector = ({lines, onClose , handleRideCreationSuccess}) => {
                 ...prev,
                 ...{
                     end_station_name: station,
-                    ride_giver: user
+                    ride_taker: user,
+                    ride_status: "Pending"
                 }
             }
         })
@@ -133,7 +148,7 @@ const StationSelector = ({lines, onClose , handleRideCreationSuccess}) => {
                                                                               onPress={() => selectEndStation(station)}/>)}
             </ScrollView>}
             {step === 3 && <View style={CREATEBUTTONVIEW}>
-                <GenericButton onPress={()=>createRide(rideObj)} buttonStyle={CREATEBUTTON} buttonText="Fahrt erstellen"
+                <GenericButton onPress={()=>updateRide(rideObj)} buttonStyle={CREATEBUTTON} buttonText="Fahrt erstellen"
                                textStyle={CREATEBUTTONTEXT}/>
             </View>}
             <GenericButton onPress={onClose} buttonStyle={CLOSEBUTTON} textStyle={CLOSEBUTTONTEXT} buttonText="X"/>
@@ -141,4 +156,4 @@ const StationSelector = ({lines, onClose , handleRideCreationSuccess}) => {
     )
 }
 
-export default StationSelector
+export default StationSelectorSearch

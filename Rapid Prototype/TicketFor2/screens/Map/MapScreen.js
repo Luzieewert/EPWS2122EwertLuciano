@@ -1,10 +1,14 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {PermissionsAndroid, StyleSheet, View} from 'react-native';
-import MapView, { Marker} from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import GenericButton from "../components/GenericButton";
 import {UserContext} from "../../contexts/UserContext";
 import StationSelector from "./StationSelector";
 import {RideContext} from "../../contexts/RideContext";
+import axios from "axios";
+import RideConfirmation from "./RideConfirmation";
+import {useNavigation} from "@react-navigation/native";
+import StationSelectorSearch from "./StationSelectorSearch";
 
 const styles = StyleSheet.create({
     container: {
@@ -26,6 +30,15 @@ const askForLocation = () => {
 const RIDECREATIONBUTTON = {
     position: "absolute",
     top: 15,
+    left: 15,
+    backgroundColor: "#000000",
+    borderRadius: 5,
+    padding: 8
+}
+
+const RIDESEARCHBUTTON = {
+    position: "absolute",
+    top: 55,
     left: 15,
     backgroundColor: "#000000",
     borderRadius: 5,
@@ -71,6 +84,14 @@ const lines = [
     },
 ]
 
+const linesSearch = [
+    {
+        id: 78645,
+        name: "12 (Zollstock Südfriedhof)",
+        direction: "Zollstock Südfriedhof",
+        stations: ["Eifelstr.", "Eifelplatz", "Pohligstr.", "Herthastr.", "Gottesweg", "Zollstockgürtel", "Zollstock Südfriedhof"]
+    },
+]
 
 const barbarossaStation = [
     {
@@ -92,8 +113,19 @@ const barbarossaStation = [
     }
 ]
 
+const barbarossaStationSearcher = [
+    {
+        name: "Barbarossaplatz",
+        lines: "12, 15",
+        coordinates: {
+            latitude: 50.929027,
+            longitude: 6.941914
+        }
+    },
+]
+
 const markerStatusMap = {
-    Created: "green",
+    Created: "blue",
     Pending: "yellow",
 }
 
@@ -109,13 +141,57 @@ const MapScreen = () => {
     const [user, setUser] = useContext(UserContext)
     const [ride, setRide] = useContext(RideContext)
     const [showRides, setShowRides] = useState(false)
-    const [showButton, setShowButton] = useState(user.has_ticket === true)
+    const [showRidesSearcher, setShowRidesSearcher] = useState(false)
+    const [showCreateButton, setShowCreateButton] = useState(user.has_ticket === true)
+    const [showSearchButton, setShowSearchButton] = useState(true)
     const [showStationSelector, setShowStationSelector] = useState(false)
+    const [showStationSelectorSearch, setShowStationSelectorSearch] = useState(false)
+    const [showConfirmation, setShowConfirmation] = useState(false)
+    const navigation = useNavigation()
+
+
+    const getCurrentRide = async (rideId) => {
+        await axios.get('http://localhost:8001/TicketFor2/ride/' + rideId)
+            .then((res) => {
+                const newRide = res.data
+                setRide(newRide)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+
+
+    useEffect(() => {
+        if (ride) {
+            const handle = setInterval(() => getCurrentRide(ride._id), 5000)
+            return () => {
+                clearInterval(handle)
+            }
+        }
+        return () => {
+        }
+    }, [ride])
+
+
+
+    useEffect(()=> {
+        if(ride && ride.ride_status === "Started"){
+            navigation.reset({index: 0, routes: [{name: 'Ride'}]})
+            navigation.navigate('Ride')
+        }
+    },[ride?.ride_status])
 
     const searchForRides = () => {
-        if (!user.has_ticket) return null
         setShowRides(true)
-        setShowButton(false)
+        setShowCreateButton(false)
+        setShowSearchButton(false)
+    }
+
+    const searchForRidesSearcher = () => {
+        setShowRidesSearcher(true)
+        setShowSearchButton(false)
     }
 
     const selectStation = () => {
@@ -123,18 +199,53 @@ const MapScreen = () => {
         setShowStationSelector(true)
     }
 
+    const selectStationSearch = () => {
+        setShowStationSelectorSearch(true)
+    }
+
     const closeStationSelector = () => {
         setShowStationSelector(false)
-        setShowButton(true)
+        setShowCreateButton(true)
+        setShowRides(false)
+    }
+
+    const closeStationSelectorSearch = () => {
+        setShowStationSelectorSearch(false)
+        setShowCreateButton(true)
         setShowRides(false)
     }
 
     const handleRideCreationSuccess = () => {
         setShowStationSelector(false)
-        setShowButton(false)
+        setShowCreateButton(false)
         setShowRides(false)
+        setShowSearchButton(false)
+        setShowStationSelectorSearch(false)
+        setShowRidesSearcher(false)
     }
 
+    const updateRide = async (rideData) => {
+        await axios.put('http://localhost:8001/TicketFor2/ride/' + ride._id, rideData)
+            .then((res) => {
+                const newRide = res.data
+                setRide(newRide)
+                setShowConfirmation(false)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    const handleConfirmation = (choice) => {
+        if (choice) {
+            updateRide({"ride_status": "Started"}).then(() => {
+                const newRide = {...ride,ride_status: "Started"}
+                setRide(newRide)
+            })
+        } else {
+            updateRide({"ride_taker": {}, "ride_status": "Created"}).then(() => null)
+        }
+    }
     const renderMarkers = () => {
         return barbarossaStation.map((station, index) => {
             return <Marker
@@ -144,30 +255,54 @@ const MapScreen = () => {
                 title={station.name + "(" + station.lines + ")"}/>
         })
     }
-        return (
-            <View style={styles.container}>
-                <MapView
-                    style={styles.map}
-                    initialRegion={initialState}
-                    showsUserLocation={true}
-                    onMapReady={askForLocation}
-                >
-                    {showRides && renderMarkers()}
-                    {ride && <Marker coordinate={{
-                        latitude: 50.929027,
-                        longitude: 6.941914,
-                    }} title={ride.start_station_name + " " + "(" + ride.ride_status + ")"} pinColor={markerStatusMap[ride.ride_status]}/>}
-                </MapView>
-                {showButton && <GenericButton onPress={searchForRides}
-                                              buttonStyle={RIDECREATIONBUTTON}
-                                              buttonText="Fahrt Erstellen"
-                                              textStyle={RIDECREATIONBUTTONTEXT}
 
-                />}
-                {showStationSelector && <StationSelector handleRideCreationSuccess={handleRideCreationSuccess} lines={lines} onClose={closeStationSelector}/>}
-
-            </View>
-        );
+    const renderMarkersSearch = () => {
+        return barbarossaStationSearcher.map((station, index) => {
+            return <Marker
+                onCalloutPress={selectStationSearch}
+                key={index}
+                coordinate={station.coordinates}
+                title={station.name + "(" + station.lines + ")"}/>
+        })
     }
 
-    export default MapScreen;
+    const renderCurrentRideMarker = () => {
+        return <Marker key={"mark176" + ride.ride_status} coordinate={{
+            latitude: 50.929027,
+            longitude: 6.941914,
+        }} onCalloutPress={ride.ride_status === "Pending" && user.has_ticket ? () => setShowConfirmation(true) : null}
+                       title={ride.start_station_name + " " + "(" + ride.ride_status + ")"}
+                       pinColor={markerStatusMap[ride.ride_status]}/>
+    }
+    return (
+        <View style={styles.container}>
+            <MapView
+                style={styles.map}
+                initialRegion={initialState}
+                showsUserLocation={true}
+                onMapReady={askForLocation}
+            >
+                {showRides && renderMarkers()}
+                {showRidesSearcher && renderMarkersSearch()}
+                {ride && renderCurrentRideMarker()}
+            </MapView>
+            {showCreateButton && <GenericButton onPress={searchForRides}
+                                                buttonStyle={RIDECREATIONBUTTON}
+                                                buttonText="Fahrt Erstellen"
+                                                textStyle={RIDECREATIONBUTTONTEXT}
+            />}
+            {showSearchButton && <GenericButton onPress={searchForRidesSearcher}
+                                                buttonStyle={RIDESEARCHBUTTON}
+                                                buttonText="Fahrt Suchen"
+                                                textStyle={RIDECREATIONBUTTONTEXT}
+            />}
+            {showStationSelector && <StationSelector handleRideCreationSuccess={handleRideCreationSuccess} lines={lines}
+                                                     onClose={closeStationSelector}/>}
+            {showStationSelectorSearch && <StationSelectorSearch handleRideCreationSuccess={handleRideCreationSuccess} lines={linesSearch}
+                                                     onClose={closeStationSelectorSearch}/>}
+            {showConfirmation && <RideConfirmation handleConfirmation={handleConfirmation} taker={ride?.ride_taker}/>}
+        </View>
+    );
+}
+
+export default MapScreen;

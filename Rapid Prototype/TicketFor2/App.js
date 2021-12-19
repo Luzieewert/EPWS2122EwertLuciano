@@ -37,6 +37,16 @@ const App = () => {
 
           <Stack.Screen
               options={{
+                  title: 'Ride',
+                  headerTitleAlign: 'center',
+                  headerRight: LogOutButton
+              }}
+              name="Ride"
+              component={PlaceholderScreen}
+          />
+
+          <Stack.Screen
+              options={{
                   title: 'Registration',
                   headerTitleAlign: 'center',
               }}

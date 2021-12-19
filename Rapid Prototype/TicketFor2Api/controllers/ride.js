@@ -4,6 +4,20 @@ const getRides = ((req,res) => {
     return res.send("Read To be implemented")
 })
 
+const getRide = ((req,res) => {
+    Ride.findById(req.params.id, null,null,(err,result) => {
+            if(err) res.send(err)
+            else res.send(result)
+        })
+})
+
+const getRideByStation = ((req,res) => {
+    Ride.findOne({start_station_name: req.params.station},null,null,(err,result) => {
+        if(err) res.send(err)
+        else res.send(result)
+    })
+})
+
 const createRide = ((req,res) => {
     const newRide = new Ride({...req.body})
     newRide.save()
@@ -23,4 +37,4 @@ const updateRide = ((req,res) => {
     })
 })
 
-module.exports = {getRides,createRide,updateRide}
+module.exports = {getRides,getRide,createRide,updateRide, getRideByStation}
