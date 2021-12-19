@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {PermissionsAndroid, StyleSheet, View} from 'react-native';
+import {PermissionsAndroid, StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import GenericButton from "../components/GenericButton";
 import {UserContext} from "../../contexts/UserContext";
@@ -17,7 +17,18 @@ const styles = StyleSheet.create({
     map: {
         flex: 1
     },
+    button: {
+        position: "absolute",
+        top: 5,
+        right: 5,
+        backgroundColor: "black",
+        padding: 7
+    },
+    buttonText: {
+        color: "white"
+    }
 });
+
 
 const askForLocation = () => {
     PermissionsAndroid.request(
@@ -301,6 +312,13 @@ const MapScreen = () => {
             {showStationSelectorSearch && <StationSelectorSearch handleRideCreationSuccess={handleRideCreationSuccess} lines={linesSearch}
                                                      onClose={closeStationSelectorSearch}/>}
             {showConfirmation && <RideConfirmation handleConfirmation={handleConfirmation} taker={ride?.ride_taker}/>}
+
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("ChatFallback")}>
+
+                <Text style = {styles.buttonText}>
+                    Chat
+                </Text>
+            </TouchableOpacity>
         </View>
     );
 }

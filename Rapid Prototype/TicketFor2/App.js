@@ -8,6 +8,7 @@ import MapScreen from "./screens/Map/MapScreen";
 import {UserProvider} from "./contexts/UserContext";
 import LogOutButton from "./screens/components/LogOutButton";
 import {RideProvider} from "./contexts/RideContext";
+import ChatScreenFallback from "./screens/chat/ChatScreenFallback";
 
 const Stack = createNativeStackNavigator();
 
@@ -60,6 +61,14 @@ const App = () => {
               }}
               name="Placeholder"
               component={PlaceholderScreen}
+          />
+          <Stack.Screen
+              options={{
+                  title: 'Chat',
+                  headerTitleAlign: 'center',
+              }}
+              name="ChatFallback"
+              component={ChatScreenFallback}
           />
       </Stack.Navigator>
             </RideProvider>
