@@ -6,8 +6,7 @@ import {UserContext} from "../../contexts/UserContext";
 import styles from "./styles";
 import text from "../../theme/text";
 import {handlePost} from "../../utils/databaseInteraction";
-
-const loginUrl = "http://localhost:8001/TicketFor2/login"
+import {urls} from "../../utils/urls";
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -36,7 +35,7 @@ const LoginScreen = () => {
 
 
             <GenericButton buttonText="Anmelden" buttonStyle={styles.button} textStyle={text.inButton}
-                           onPress={() => handlePost(loginUrl, loginData, handleLoginSuccess)}/>
+                           onPress={() => handlePost(urls.login, loginData, handleLoginSuccess)}/>
 
             <GenericButton buttonText="Registrieren" buttonStyle={styles.button} textStyle={text.inButton}
                            onPress={() => navigation.navigate("Registration")}/>

@@ -6,8 +6,7 @@ import styles from "./styles";
 import TicketCheckBox from "./TicketCheckBox";
 import {handlePost} from "../../utils/databaseInteraction";
 import text from "../../theme/text";
-
-const registrationUrl = "http://localhost:8001/TicketFor2/signup"
+import {urls} from "../../utils/urls";
 
 const RegistrationScreen = () => {
     const [registrationData, setRegistrationData] = useState({})
@@ -42,7 +41,7 @@ const RegistrationScreen = () => {
             />
             <TicketCheckBox has_ticket={registrationData.has_ticket} setRegistrationData={setRegistrationData}/>
             <GenericButton buttonText="Jetzt registrieren" buttonStyle={styles.button} textStyle={text.inButton}
-                           onPress={() => handlePost(registrationUrl, registrationData, navigation.navigate('Login'))}/>
+                           onPress={() => handlePost(urls.register, registrationData, navigation.navigate('Login'))}/>
         </View>
 
     );
