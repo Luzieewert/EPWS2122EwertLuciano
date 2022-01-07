@@ -15,7 +15,7 @@ const LoginScreen = () => {
 
     const handleLoginSuccess = (res) => {
         setUser(res.data.user)
-        navigation.reset({index: 0, routes: [{name: 'Map'}]})
+        navigation.reset({index: 0, routes: [{name: 'ModeSelection'}]})
     }
 
     return (

@@ -8,6 +8,7 @@ import RegistrationScreen from "../screens/registration/RegistrationScreen";
 import PlaceholderScreen from "../screens/placeholder/PlaceholderScreen";
 import ChatScreenFallback from "../screens/chat/ChatScreenFallback";
 import PostRideScreen from "../screens/post-ride/PostRideScreen";
+import ModeSelectionScreen from "../screens/mode-selection/ModeSelectionScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -76,6 +77,15 @@ const Navigator = () => {
                 }}
                 name="PostRide"
                 component={PostRideScreen}
+            />
+
+            <Stack.Screen
+                options={{
+                    title: 'Mode Selection',
+                    headerTitleAlign: 'center',
+                }}
+                name="ModeSelection"
+                component={ModeSelectionScreen}
             />
         </Stack.Navigator>
     )
