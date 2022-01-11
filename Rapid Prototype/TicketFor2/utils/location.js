@@ -23,3 +23,13 @@ export const locationPermissionHandle = async () => {
     }
     return permission
 }
+
+export const getLocation = async () => {
+    const location = await RNLocation.getLatestLocation({timeout: 100})
+    return {
+        latitudeDelta: 0.00375,
+        longitudeDelta: 0.00521,
+        latitude: location.latitude,
+        longitude: location.longitude
+    }
+};

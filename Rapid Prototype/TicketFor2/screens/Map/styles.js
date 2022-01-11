@@ -1,0 +1,120 @@
+import {StyleSheet} from "react-native";
+import spacing from "../../theme/spacing";
+import border from "../../theme/border";
+import button from "../../theme/button";
+import text from "../../theme/text";
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+    map: {
+        flex: 1
+    },
+    creationButton: {
+        position: "absolute",
+        top: 15,
+        left: 15,
+        ...button.base,
+        ...border.base,
+    },
+    searchButton: {
+        position: "absolute",
+        top: 55,
+        left: 15,
+        ...border.base,
+        ...button.base,
+    },
+    rideSelectionMenu: {
+        position: "absolute",
+        top: "20%",
+        left: "15%",
+        backgroundColor: "black",
+        padding: 10,
+        borderRadius: 5,
+        width: "70%",
+        height: "50%"
+    },
+    rideSelectionMenuButton: {
+        marginVertical: 4,
+        ...button.base
+    },
+    rideSelectionMenuText: {
+        ...text.inButton,
+        marginBottom: spacing[0]
+    },
+    rideSelectionMenuCreationBtnCont: {
+        alignItems: "center",
+        justifyContent: "center",
+        flex: 1
+    },
+    rideSelectionMenuCreationBtn: {
+        ...button.base,
+        borderColor: "#fff",
+    },
+    rideSelectionMenuCreationBtnText: {
+        ...text.inButton,
+        fontSize: 18
+    },
+    scrollContainer: {
+        padding: 4
+    },
+
+    lineSelector: {
+        marginTop: 10,
+        padding: 4
+    },
+
+    lineSelectorText: {
+        ...text.inButton,
+        marginBottom: 7
+    },
+
+    lineSelectorButton: {
+        ...button.base,
+        marginVertical: 4,
+        borderWidth: 1,
+        borderColor: "white",
+    },
+    closeBtn: {
+        position: "absolute",
+        top: 5,
+        right: 5,
+        borderWidth: 1,
+        borderColor: "white",
+        borderRadius: 100,
+        width: 22,
+        height: 22,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    rideConfirmationContainer: {
+        position: "absolute",
+        top: "20%",
+        left: "15%",
+        backgroundColor: "black",
+        padding: 10,
+        borderRadius: 5,
+        width: "70%",
+        height: "50%",
+    },
+    rideConfirmationInnerContainer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    rideConfirmationButtonContainer: {
+        flexDirection: "row",
+    },
+    rideConfirmationButton: {
+        ...button.base,
+        marginTop: spacing[0],
+        marginHorizontal: 4,
+        borderWidth: 1,
+        borderColor: "white",
+    }
+
+
+});
+
+export default styles
