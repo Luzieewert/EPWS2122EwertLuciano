@@ -1,9 +1,10 @@
 import React, {useContext} from "react"
 import {Text, TouchableOpacity} from "react-native"
 import {useNavigation} from "@react-navigation/native";
-import axios from "axios";
 import {UserContext} from "../../contexts/UserContext";
 import {RideContext} from "../../contexts/RideContext";
+import {handleGet} from "../../utils/databaseInteraction";
+import {urls} from "../../utils/urls";
 
 
 const LogOutButton = () => {
@@ -11,26 +12,15 @@ const LogOutButton = () => {
     const [user, setUser] = useContext(UserContext)
     const [ride, setRide] = useContext(RideContext)
 
-
-
-    const handleLogOut = async () => {
-        await axios.get('http://localhost:8001/TicketFor2/logout')
-            .then(() => {
-                setUser({})
-                setRide({})
-
-                navigation.reset({index: 0, routes: [{name: 'Login'}]})
-                navigation.navigate('Login')
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
+    const handleLogOutSuccess = () => {
+        setUser({})
+        setRide({})
+        navigation.reset({index: 0, routes: [{name: 'Login'}]})
     };
 
     return (
-        <TouchableOpacity onPress={handleLogOut}>
-            <Text>Log Out</Text>
+        <TouchableOpacity onPress={() => handleGet(urls.logOut,handleLogOutSuccess)}>
+            <Text>Logout</Text>
         </TouchableOpacity>
     )
 }

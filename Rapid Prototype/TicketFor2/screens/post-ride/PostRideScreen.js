@@ -4,28 +4,8 @@ import GenericButton from "../components/GenericButton";
 import {useNavigation} from "@react-navigation/native";
 import {RideContext} from "../../contexts/RideContext";
 import {UserContext} from "../../contexts/UserContext";
-
-const TEXT = {
-    fontSize: 24,
-    color: "#4ca0ed"
-}
-const CONTAINER = {
-    flex: 1,
-    justifyContent: "center",
-    padding: 10,
-    alignItems: "center",
-}
-
-const BUTTON = {
-    backgroundColor: "black",
-    padding: 8,
-    borderRadius: 5,
-    marginTop: 7
-}
-
-const BUTTONTEXT = {
-color: "white"
-}
+import styles from "./styles";
+import text from "../../theme/text";
 
 const PostRideScreen = () => {
     const navigation = useNavigation()
@@ -34,12 +14,12 @@ const PostRideScreen = () => {
 
     const handleBackToMap = () => {
         setRide({})
-        navigation.navigate("Map")
+        navigation.reset({index: 0, routes: [{name: 'ModeSelection'}]})
     }
     return (
-        <View style={CONTAINER}>
-            <Text style={TEXT}>Sie haben was gutes getan!, wir wünschen ihnen einen wunderschönen Tag</Text>
-            <GenericButton buttonText="Zur Karte" buttonStyle={BUTTON} textStyle={BUTTONTEXT} onPress={handleBackToMap}/>
+        <View style={styles.container}>
+            <Text style={styles.mainText}>Sie haben was gutes getan!, wir wünschen ihnen einen wunderschönen Tag</Text>
+            <GenericButton buttonText="Zur Karte" buttonStyle={styles.button} textStyle={text.inButton} onPress={handleBackToMap}/>
         </View>
     )
 }

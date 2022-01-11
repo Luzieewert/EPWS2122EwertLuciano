@@ -1,87 +1,50 @@
 import React, {useContext, useEffect} from "react"
-import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {View} from "react-native";
 import GenericButton from "../components/GenericButton";
 import {useNavigation} from "@react-navigation/native";
-import axios from "axios";
 import {RideContext} from "../../contexts/RideContext";
 import {UserContext} from "../../contexts/UserContext";
+import styles from "./styles";
+import text from "../../theme/text";
+import {handleGet, handlePut} from "../../utils/databaseInteraction";
+import {urls} from "../../utils/urls";
 
-const styles = StyleSheet.create({
-    button: {
-        backgroundColor: "black",
-        padding: 7,
-        borderRadius: 5,
-        alignItems: "center",
-        width: "40%",
-        marginVertical: 4
-    },
-    buttonText: {
-        color: "white"
-    },
-
-    container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center"
-    }
-});
-
-
-const RideScreen = () => {
+const RideScreen = ({route}) => {
     const [ride, setRide] = useContext(RideContext)
     const [user, setUser] = useContext(UserContext)
+    const {mode} = route.params
     const navigation = useNavigation()
 
+    const updateRideCallback = (res) => {
+        const newRide = res.data.ride
+        setRide(newRide)
 
-    const getCurrentRide = async (rideId) => {
-        await axios.get('http://localhost:8001/TicketFor2/ride/' + rideId)
-            .then((res) => {
-                const newRide = res.data
-                setRide(newRide)
-                if(newRide.ride_status === "Completed") {
-                    navigation.reset({index: 0, routes: [{name: 'PostRide'}]})
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        if (newRide.ride_status === "Completed") {
+            navigation.reset({index: 0, routes: [{name: 'PostRide'}]})
+        }
     }
 
 
     useEffect(() => {
-            const handle = setInterval(() => getCurrentRide(ride._id), 5000)
-            return () => {
-                clearInterval(handle)
-            }
+        const handle = setInterval(() => handleGet(urls.ride + ride._id, updateRideCallback), 5000)
+        return () => {
+            clearInterval(handle)
+        }
     }, [ride])
 
-    const updateRide = async (rideData) => {
-        await axios.put('http://localhost:8001/TicketFor2/ride/' + ride._id, rideData)
-            .then((res) => {
-                const newRide = res.data
-                setRide(newRide)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
-    const navigateToChat = () => {
-        navigation.navigate("ChatFallback")
-    }
-
-    const endRide = (newStatus) => {
-        updateRide({ride_status: newStatus}).then(() => {
-            navigation.reset({index: 0, routes: [{name: 'PostRide'}]})
-        })
-    }
 
     return (
         <View style={styles.container}>
-            <GenericButton onPress={navigateToChat} buttonStyle={styles.button} textStyle={styles.buttonText}
+            <GenericButton onPress={navigation.navigate("ChatFallback")} buttonStyle={styles.button}
+                           textStyle={text.inButton}
                            buttonText="Chat"/>
-            {ride.ride_giver._id === user._id && <GenericButton onPress={()=>endRide("Completed")} buttonStyle={styles.button} textStyle={styles.buttonText}
-                           buttonText="End Ride"/> }
+            {mode === "Creator" &&
+                <GenericButton onPress={() => handlePut(urls.ride + ride._id, () => navigation.reset({
+                    index: 0,
+                    routes: [{name: 'PostRide'}]
+                }))} buttonStyle={styles.button}
+                               textStyle={text.inButton}
+                               buttonText="End Ride"/>}
         </View>
     )
 }

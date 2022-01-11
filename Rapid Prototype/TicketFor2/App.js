@@ -1,92 +1,30 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import LoginScreen from './screens/login/LoginScreen';
-import RegistrationScreen from './screens/registration/RegistrationScreen';
-import PlaceholderScreen from './screens/placeholder/PlaceholderScreen';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import MapScreen from "./screens/Map/MapScreen";
 import {UserProvider} from "./contexts/UserContext";
-import LogOutButton from "./screens/components/LogOutButton";
 import {RideProvider} from "./contexts/RideContext";
-import ChatScreenFallback from "./screens/chat/ChatScreenFallback";
-import RideScreen from "./screens/ride/RideScreen";
-import PostRideScreen from "./screens/post-ride/PostRideScreen";
+import Navigator from "./navigator/Navigator";
+import RNLocation from 'react-native-location';
+import {locationPermissionHandle} from "./utils/location";
 
-const Stack = createNativeStackNavigator();
+RNLocation.configure({
+    distanceFilter: 1.0,
+}).then(() => null)
+
+
 
 const App = () => {
-  return (
-    <NavigationContainer>
-        <UserProvider>
-            <RideProvider>
-      <Stack.Navigator>
-          <Stack.Screen
-              options={{
-                  title: 'Login',
-                  headerTitleAlign: 'center',
-              }}
-              name="Login"
-              component={LoginScreen}/>
-          <Stack.Screen
-              options={{
-                  title: 'Map',
-                  headerTitleAlign: 'center',
-                  headerRight: LogOutButton
-
-              }}
-              name="Map"
-              component={MapScreen}
-          />
-
-          <Stack.Screen
-              options={{
-                  title: 'Ride',
-                  headerTitleAlign: 'center',
-                  headerRight: LogOutButton
-              }}
-              name="Ride"
-              component={RideScreen}
-          />
-
-          <Stack.Screen
-              options={{
-                  title: 'Registration',
-                  headerTitleAlign: 'center',
-              }}
-              name="Registration"
-              component={RegistrationScreen}
-          />
-          <Stack.Screen
-              options={{
-                  title: 'Placeholder',
-                  headerTitleAlign: 'center',
-              }}
-              name="Placeholder"
-              component={PlaceholderScreen}
-          />
-          <Stack.Screen
-              options={{
-                  title: 'Chat',
-                  headerTitleAlign: 'center',
-              }}
-              name="ChatFallback"
-              component={ChatScreenFallback}
-          />
-
-          <Stack.Screen
-              options={{
-                  title: 'After Party',
-                  headerTitleAlign: 'center',
-              }}
-              name="PostRide"
-              component={PostRideScreen}
-          />
-      </Stack.Navigator>
-            </RideProvider>
-        </UserProvider>
-    </NavigationContainer>
-  );
+    useEffect(() => {
+       locationPermissionHandle().then(null)
+    }, [])
+    return (
+        <NavigationContainer>
+            <UserProvider>
+                <RideProvider>
+                    <Navigator/>
+                </RideProvider>
+            </UserProvider>
+        </NavigationContainer>
+    );
 };
-
 
 export default App;
