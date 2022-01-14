@@ -3,20 +3,24 @@ import styles from "./styles";
 import MapView from "react-native-maps";
 import {renderCurrentRideMarker, renderMarkers} from "./utils";
 import {View} from "react-native";
-import {getLocation} from "../../utils/location";
+import {getLocationUpdates} from "../../utils/location";
 
-const Map = ({ride, renderObjects}) => {
-    const [location, setLocation] = useState({})
+const Map = ({ride, renderObjects, watchRef}) => {
+    const [location, setLocation] = useState()
+
 
     useEffect(() => {
-        getLocation().then(res => setLocation(res))
+        getLocationUpdates(watchRef,setLocation)
     }, [])
+
+    if (!location) return null
+
 
     return (
         <View style={styles.container}>
             <MapView
                 style={styles.map}
-                showsUserLocation
+                showsUserLocation={true}
                 region={location}
             >
                 {renderObjects && renderMarkers(renderObjects)}
@@ -27,3 +31,4 @@ const Map = ({ride, renderObjects}) => {
 }
 
 export default Map
+

@@ -11,7 +11,8 @@ const ModeSelection = () => {
 
     const handleModeSelect = async (mode) => {
         const permission = await locationPermissionHandle()
-        if (!permission) {
+
+        if (!permission || permission === "never_ask_again") {
             console.warn("Wir haben kein Zugriff auf ihr Standort")
             return null
         }
