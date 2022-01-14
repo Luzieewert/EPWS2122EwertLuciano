@@ -1,35 +1,87 @@
-import RNLocation from "react-native-location";
+import {Alert, PermissionsAndroid} from "react-native";
+import Geolocation from 'react-native-geolocation-service';
+
+const deltas = {
+    latitudeDelta: 0.00375,
+    longitudeDelta: 0.00521,
+}
+
+
+const options = {
+    accuracy: {
+        android: 'high',
+        ios: 'best',
+    },
+    enableHighAccuracy: true,
+    timeout: 15000,
+    maximumAge: 10000,
+    distanceFilter: 0,
+    forceRequestLocation: true,
+    forceLocationManager: false,
+    showLocationDialog: true,
+}
 
 export const locationPermissionHandle = async () => {
-    let permission = await RNLocation.checkPermission({
-        ios: 'whenInUse', // or 'always'
-        android: {
-            detail: 'coarse' // or 'fine'
-        }
-    })
-    if(!permission) {
-      permission = await RNLocation.requestPermission({
-            ios: "whenInUse",
-            android: {
-                detail: "coarse",
-                rationale: {
-                    title: "Wir brauchen zugriff auf ihr Standort",
-                    message: "Wir nutzen ihre Standort um viele unsere Funktionalitäten bieten zu können",
-                    buttonPositive: "OK",
-                    buttonNegative: "Cancel"
-                }
-            }
+    let permission = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+
+    if (!permission) {
+        permission = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+            , {
+                title: "Wir brauchen ihre Standort",
+                message: "Wir nutzen ihre Standort um alle TicketFor2 Funktionalitäten zu ermöglichen",
+                buttonNeutral: "Ask Me Later",
+                buttonNegative: "Cancel",
+                buttonPositive: "OK"
+            }).catch(err => {
+            console.error(err)
         })
     }
     return permission
 }
 
-export const getLocation = async () => {
-    const location = await RNLocation.getLatestLocation({timeout: 100})
-    return {
-        latitudeDelta: 0.00375,
-        longitudeDelta: 0.00521,
-        latitude: location.latitude,
-        longitude: location.longitude
+export const getLocation = (callback) => {
+    Geolocation.getCurrentPosition(
+        (position) => {
+            callback({
+                ...deltas,
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            })
+        },
+        (error) => {
+            Alert.alert(`Code ${error.code}`, error.message);
+        },
+        options,
+    )
+}
+
+export const getLocationUpdates = (ref, callback) => {
+    ref.current = Geolocation.watchPosition(
+        (position) => {
+            callback({
+                ...deltas,
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            });
+        },
+        (error) => {
+            console.log(error);
+        },
+        {
+            ...options,
+            interval: 5000,
+            fastestInterval: 2000,
+            useSignificantChanges: false,
+        },
+    );
+}
+
+export const stopLocationUpdates = (ref) => {
+    if (ref.current !== null) {
+        Geolocation.clearWatch(ref.current);
+        ref.current = null;
     }
-};
+}
+
+
