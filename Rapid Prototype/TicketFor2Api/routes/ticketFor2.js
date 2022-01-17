@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const passport = require("passport");
 const {getRides, createRide, updateRide, getRide, getRideByStation} = require("../controllers/ride");
+const {getDeparturesInLocation} = require("../controllers/departure");
 
 
 router.post("/signup", (req, res, next) => {
@@ -54,6 +55,9 @@ router.get('/ride/:id', isLoggedIn,getRide)
 router.get('/rideByStation/:station', isLoggedIn,getRideByStation)
 router.post('/ride', isLoggedIn, createRide);
 router.put('/ride/:id', isLoggedIn, updateRide);
+
+// Stations/Departures
+router.get('/departures',isLoggedIn, getDeparturesInLocation)
 
 
 
