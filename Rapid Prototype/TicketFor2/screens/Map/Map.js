@@ -1,27 +1,21 @@
-import React, {useEffect, useState} from 'react';
+import React, {useRef} from 'react';
 import styles from "./styles";
 import MapView from "react-native-maps";
 import {renderCurrentRideMarker, renderMarkers} from "./utils";
 import {View} from "react-native";
-import {getLocationUpdates} from "../../utils/location";
+import {onUserLocationChange} from "../../utils/location";
 
-const Map = ({ride, renderObjects, watchRef}) => {
-    const [location, setLocation] = useState()
-
-
-    useEffect(() => {
-        getLocationUpdates(watchRef,setLocation)
-    }, [])
-
-    if (!location) return null
-
+const Map = ({ride, renderObjects}) => {
+    const map = useRef()
 
     return (
         <View style={styles.container}>
             <MapView
+                ref={map}
                 style={styles.map}
                 showsUserLocation={true}
-                region={location}
+                onUserLocationChange={(event) => onUserLocationChange(event, map)}
+
             >
                 {renderObjects && renderMarkers(renderObjects)}
                 {Object.keys(ride).length > 0 && renderCurrentRideMarker()}

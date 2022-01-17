@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {RideContext} from "../../contexts/RideContext";
 import {useNavigation} from "@react-navigation/native";
 import {handleGet, handlePut} from "../../utils/databaseInteraction";
@@ -6,16 +6,12 @@ import {urls} from "../../utils/urls";
 import RideSelectionMenu from "./RideSelectionMenu";
 import RideConfirmation from "./RideConfirmation";
 import Map from "./Map";
-import {stopLocationUpdates} from "../../utils/location";
 
 const MapScreen = ({route}) => {
     const [ride, setRide] = useContext(RideContext)
     const [renderObjects,setRenderObjects] = useState([])
     const [showRideSelection, setShowRideSelection] = useState(false)
     const [showConfirmation, setShowConfirmation] = useState(false)
-
-    const watchId = useRef()
-
     const navigation = useNavigation()
     const isRide = Object.keys(ride).length > 0
     const {mode} = route.params
@@ -38,7 +34,6 @@ const MapScreen = ({route}) => {
 
     useEffect(() => {
         if (isRide && ride.ride_status === "Started") {
-            stopLocationUpdates(watchId)
             navigation.reset({index: 0, routes: [{name: 'Ride'}]}, {mode: mode})
         }
         return () => {
@@ -67,7 +62,7 @@ const MapScreen = ({route}) => {
 
     return (
         <>
-            <Map ride={ride} renderObjects={renderObjects} watchRef={watchId}/>
+            <Map ride={ride} renderObjects={renderObjects} />
             {showRideSelection && <RideSelectionMenu isCreator={mode === "Creator"}/>}
             {showConfirmation && <RideConfirmation handleConfirmation={handleConfirmation} taker={ride?.ride_taker}/>}
         </>

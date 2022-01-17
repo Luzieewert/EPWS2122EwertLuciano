@@ -84,4 +84,12 @@ export const stopLocationUpdates = (ref) => {
     }
 }
 
+export const onUserLocationChange = (event, ref) => {
+    const location = {
+        ...deltas,
+        latitude: event.nativeEvent.coordinate.latitude,
+        longitude: event.nativeEvent.coordinate.longitude
+    }
+    ref.current.animateToRegion(location, 1500)
+}
 
