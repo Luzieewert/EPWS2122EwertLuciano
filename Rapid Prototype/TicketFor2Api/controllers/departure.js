@@ -29,7 +29,7 @@ const getDeparturesInLocation = async (req, res) => {
             }
         })
 
-        return res.status(200).json({data: result})
+        return res.status(200).json({result: result})
 
     } catch (err) {
         console.error(err)

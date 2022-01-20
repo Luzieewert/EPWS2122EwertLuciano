@@ -7,7 +7,7 @@ const getRides = ((req,res) => {
 const getRide = ((req,res) => {
     Ride.findById(req.params.id, null,null,(err,ride) => {
             if(err) res.send(err)
-            else res.status(200).json({ ride: ride });
+            else res.status(200).json({ result: ride });
         })
 })
 
@@ -22,7 +22,7 @@ const createRide = ((req,res) => {
     const newRide = new Ride({...req.body})
     newRide.save()
         .then((ride) => {
-            return res.status(200).json({ ride: ride });
+            return res.status(200).json({ result: ride });
         })
         .catch(err => {
             return console.log(err)
@@ -33,7 +33,7 @@ const updateRide = ((req,res) => {
     Ride.findByIdAndUpdate(req.params.id, {...req.body},{new: true},
         (err,ride) => {
         if(err) res.send(err)
-        else res.status(200).json({ride: ride })
+        else res.status(200).json({result: ride })
     })
 })
 
