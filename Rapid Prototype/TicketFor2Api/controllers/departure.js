@@ -36,4 +36,26 @@ const getDeparturesInLocation = async (req, res) => {
     }
 }
 
-module.exports = {getDeparturesInLocation}
+const getLinePath = async (req, res) => {
+    const {lineName} = req.params
+    const {start_station_name, direction} = req.query
+
+    try {
+        const url = `${urls.linePath}${lineName}`
+        const response = await axios.get(url)
+        const startIndex = response.data.indexOf(start_station_name)
+        const endIndex = response.data.indexOf(direction)
+
+        const getProperOrder = (startIndex, endIndex) => {
+            if(startIndex > endIndex) return [endIndex, startIndex]
+            return [startIndex !== -1 ? startIndex + 1 : startIndex, endIndex !== -1 ? endIndex + 1 : endIndex]
+        }
+        const result = response.data.slice(...getProperOrder(startIndex, endIndex))
+        return res.status(200).json({result: result.length ? result : response.data})
+
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+module.exports = {getDeparturesInLocation, getLinePath}

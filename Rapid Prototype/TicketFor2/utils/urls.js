@@ -3,5 +3,6 @@ export const urls = {
     login: "http://localhost:8001/TicketFor2/login",
     logOut: "http://localhost:8001/TicketFor2/logout",
     ride: "http://localhost:8001/TicketFor2/ride/",
-    departures: "http://localhost:8001/TicketFor2/departures"
+    departures: "http://localhost:8001/TicketFor2/departures",
+    linePath: "http://localhost:8001/TicketFor2/line-path/"
 }

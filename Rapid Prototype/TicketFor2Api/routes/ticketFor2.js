@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const passport = require("passport");
 const {getRides, createRide, updateRide, getRide, getRideByStation} = require("../controllers/ride");
-const {getDeparturesInLocation} = require("../controllers/departure");
+const {getDeparturesInLocation, getLinePath} = require("../controllers/departure");
 
 
 router.post("/signup", (req, res, next) => {
@@ -30,7 +30,7 @@ router.post("/login", (req, res, next) => {
             if (err) {
                 return res.status(400).json({ errors: err });
             }
-            return res.status(200).json({ user: user });
+            return res.status(200).json({ result: user });
         });
     })(req, res, next);
 });
@@ -58,6 +58,7 @@ router.put('/ride/:id', isLoggedIn, updateRide);
 
 // Stations/Departures
 router.get('/departures',isLoggedIn, getDeparturesInLocation)
+router.get('/line-path/:lineName',isLoggedIn, getLinePath)
 
 
 

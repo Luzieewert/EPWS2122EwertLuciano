@@ -9,3 +9,12 @@ export const getDepartures = async (location,callback = genericFunction, radius 
         console.error(err)
     }
 }
+
+export const getLinePath = async (lineName,start_station_name, direction, callback) => {
+    try {
+        return await handleGet(urls.linePath + lineName, {start_station_name: start_station_name, direction: direction}, callback)
+    }
+    catch (err) {
+        console.error(err)
+    }
+}
