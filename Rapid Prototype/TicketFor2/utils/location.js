@@ -1,5 +1,6 @@
 import {Alert, PermissionsAndroid} from "react-native";
 import Geolocation from 'react-native-geolocation-service';
+import {genericFunction} from "./databaseInteraction";
 
 const deltas = {
     latitudeDelta: 0.00375,
@@ -84,12 +85,35 @@ export const stopLocationUpdates = (ref) => {
     }
 }
 
-export const onUserLocationChange = (event, ref) => {
+const getHaversineDistanceM = (location1, location2) => {
+    const RADIUS_OF_EARTH_IN_KM = 6371;
+    const toRadian = angle => (Math.PI / 180) * angle;
+    const distance = (a, b) => (Math.PI / 180) * (a - b);
+
+    let [lat1,lon1] = [location1.latitude,location1.longitude]
+    let [lat2,lon2] = [location2.latitude,location2.longitude]
+
+    const dLat = distance(lat2, lat1);
+    const dLon = distance(lon2, lon1);
+
+    const a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLon / 2), 2)
+        * Math.cos(toRadian(lat1)) * Math.cos(toRadian(lat2));
+    const c = 2 * Math.asin(Math.sqrt(a));
+
+    return (RADIUS_OF_EARTH_IN_KM * c) * 1000;
+};
+
+export const onUserLocationChange = (event, ref, callback = genericFunction, currentLocation, initialRender, setInitialRender) => {
     const location = {
         ...deltas,
         latitude: event.nativeEvent.coordinate.latitude,
         longitude: event.nativeEvent.coordinate.longitude
     }
+    const locationDifference = getHaversineDistanceM(location, currentLocation) > 50
+    callback(location)
+    if(!locationDifference && !initialRender) return null
     ref.current.animateToRegion(location, 1500)
+    setInitialRender(false)
 }
+
 

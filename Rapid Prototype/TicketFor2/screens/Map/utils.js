@@ -11,8 +11,8 @@ export const renderMarkers = (markers, onMarkerCalloutPress) => {
         return <Marker
             onCalloutPress={onMarkerCalloutPress}
             key={index}
-            coordinate={marker.coordinates}
-            title={marker.name}/>
+            coordinate={marker.start_station_cords}
+            title={marker.start_station_name}/>
     })
 }
 

@@ -6,19 +6,33 @@ import {urls} from "../../utils/urls";
 import RideSelectionMenu from "./RideSelectionMenu";
 import RideConfirmation from "./RideConfirmation";
 import Map from "./Map";
+import GenericButton from "../components/GenericButton";
+import text from "../../theme/text";
+import styles from "./styles";
+import {getDepartures} from "../../utils/departure";
 
 const MapScreen = ({route}) => {
     const [ride, setRide] = useContext(RideContext)
     const [renderObjects,setRenderObjects] = useState([])
     const [showRideSelection, setShowRideSelection] = useState(false)
     const [showConfirmation, setShowConfirmation] = useState(false)
+    const [location, setLocation] = useState({})
     const navigation = useNavigation()
     const isRide = Object.keys(ride).length > 0
     const {mode} = route.params
+    const isCreator = mode === "Creator"
+    const actionBtnText = isCreator ? "Farht Erstellen" : "Farht Suchen"
 
     const setUpdatedRide = (res) => {
         const newRide = res.data.ride
         setRide(newRide)
+    }
+
+    const handleActionButtonPress = async (location) => {
+        if(isCreator) {
+            const locationString = `${location.latitude},${location.longitude}`
+            await getDepartures(locationString,setRenderObjects)
+        }
     }
 
     useEffect(() => {
@@ -40,11 +54,6 @@ const MapScreen = ({route}) => {
         }
     }, [ride?.ride_status])
 
-    useEffect(() => {
-        // if(mode === "Creator") setRenderObjects to Stations
-        // if(mode === "Searcher") setRenderObjects to Rides
-    }, [])
-
     const updateRideSuccess =  (res) => {
         const newRide = res.data.ride
         setRide(newRide)
@@ -58,13 +67,12 @@ const MapScreen = ({route}) => {
             handlePut(urls.ride,{"ride_taker": {}, "ride_status": "Created"},updateRideSuccess).then(null)
         }
     }
-
-
     return (
         <>
-            <Map ride={ride} renderObjects={renderObjects} />
-            {showRideSelection && <RideSelectionMenu isCreator={mode === "Creator"}/>}
+            <Map ride={ride} renderObjects={renderObjects} onUserLocationCallback={setLocation} location={location} />
+            {showRideSelection && <RideSelectionMenu isCreator={isCreator}/>}
             {showConfirmation && <RideConfirmation handleConfirmation={handleConfirmation} taker={ride?.ride_taker}/>}
+            <GenericButton buttonStyle={styles.mapActionButton} textStyle={text.inButton} onPress={()=>handleActionButtonPress(location)} buttonText={actionBtnText} />
         </>
     );
 }

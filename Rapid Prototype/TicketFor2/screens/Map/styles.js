@@ -112,8 +112,14 @@ const styles = StyleSheet.create({
         marginHorizontal: 4,
         borderWidth: 1,
         borderColor: "white",
+    },
+    mapActionButton: {
+        position: "absolute",
+        top: 10,
+        left: 10,
+        ...button.base,
+        ...border.base
     }
-
 
 });
 
