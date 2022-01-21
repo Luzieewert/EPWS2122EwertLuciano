@@ -9,7 +9,7 @@ import Map from "./Map";
 import GenericButton from "../components/GenericButton";
 import text from "../../theme/text";
 import styles from "./styles";
-import {getDepartures} from "../../utils/departure";
+import {getDepartures, getRidesByLocation} from "../../utils/departure";
 
 const MapScreen = ({route}) => {
     const [ride, setRide] = useContext(RideContext)
@@ -24,53 +24,49 @@ const MapScreen = ({route}) => {
     const isCreator = mode === "Creator"
     const actionBtnText = isCreator ? "Farht Erstellen" : "Farht Suchen"
 
-    const handleActionButtonPress = async (location) => {
-        if (isCreator) {
-            const locationString = `${location.latitude},${location.longitude}`
-            await getDepartures(locationString, setRenderObjects)
-        }
-    }
-
     useEffect(() => {
         if (isRide) {
-            const handle = setInterval(() => handleGet(urls.ride + ride._id, setRide), 5000)
+            const handle = setInterval(() => handleGet(urls.ride + ride._id, null, setRide), 5000)
+            if (ride.ride_status === "Started") {
+                navigation.reset({index: 0, routes: [{name: "Ride", params: {mode: mode}}]})
+            }
             return () => {
                 clearInterval(handle)
             }
         }
-        return () => {
-        }
+        return () => {}
     }, [ride])
 
-    useEffect(() => {
-        if (isRide && ride.ride_status === "Started") {
-            navigation.reset({index: 0, routes: [{name: 'Ride'}]}, {mode: mode})
+    const handleActionButtonPress = async (location) => {
+        if (isCreator) {
+            const locationString = `${location.latitude},${location.longitude}`
+            await getDepartures(locationString, setRenderObjects)
+        } else {
+            await getRidesByLocation(location, setRenderObjects)
         }
-        return () => {
-        }
-    }, [ride?.ride_status])
-
+    }
 
     const handleConfirmation = async (choice) => {
         const updateRideCallback = (res) => {
             setRide(res)
             setShowConfirmation(false)
         }
+        const data = choice ? {"ride_status": "Started"} : {"ride_taker": {}, "ride_status": "Created"}
 
-        if (choice) {
-           await handlePut(urls.ride, {"ride_status": "Started"}, updateRideCallback)
-        } else {
-           await handlePut(urls.ride, {"ride_taker": {}, "ride_status": "Created"}, updateRideCallback)
-        }
+        return await handlePut(urls.ride + ride._id, data, updateRideCallback)
     }
+
+    const onCurrentRideCalloutPress = () => isCreator && ride.ride_taker ? setShowConfirmation(true) : null
+
     return (
         <>
             <Map ride={ride} renderObjects={renderObjects} onUserLocationCallback={setLocation} location={location}
-                 onRenderObjectsCalloutPress={setSelectedElement}/>
+                 onRenderObjectsCalloutPress={setSelectedElement}
+                 onCurrentRideCalloutPress={onCurrentRideCalloutPress}/>
             {selectedElement &&
                 <RideSelectionMenu selectedElement={selectedElement} setSelectedElement={setSelectedElement}
                                    isCreator={isCreator}/>}
-            {showConfirmation && <RideConfirmation handleConfirmation={handleConfirmation} taker={ride?.ride_taker}/>}
+            {showConfirmation && <RideConfirmation handleConfirmation={handleConfirmation} taker={ride.ride_taker}/>}
             {!isRide && <GenericButton buttonStyle={styles.mapActionButton} textStyle={text.inButton}
                                        onPress={() => handleActionButtonPress(location)} buttonText={actionBtnText}/>}
         </>

@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const passport = require("passport");
-const {getRides, createRide, updateRide, getRide, getRideByStation} = require("../controllers/ride");
+const {getRides, createRide, updateRide, getRide, getRidesByLocation} = require("../controllers/ride");
 const {getDeparturesInLocation, getLinePath} = require("../controllers/departure");
 
 
@@ -52,7 +52,7 @@ function isLoggedIn(req, res, next) {
 
 router.get('/rides', isLoggedIn, getRides);
 router.get('/ride/:id', isLoggedIn,getRide)
-router.get('/rideByStation/:station', isLoggedIn,getRideByStation)
+router.get('/ridesByLocation', isLoggedIn,getRidesByLocation)
 router.post('/ride', isLoggedIn, createRide);
 router.put('/ride/:id', isLoggedIn, updateRide);
 

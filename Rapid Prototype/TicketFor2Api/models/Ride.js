@@ -10,7 +10,7 @@ const RideSchema = new mongoose.Schema(
             type: String
         },
 
-        start_station_name: {
+        name: {
             type: String
         },
 
@@ -36,7 +36,14 @@ const RideSchema = new mongoose.Schema(
         },
 
         ride_giver: {
-          type: Object
+            type: Object
+        },
+
+        ride_giver_end_station: {
+            type: String
+        },
+        ride_taker_end_station: {
+            type: String
         },
 
         ride_taker: {
@@ -53,7 +60,7 @@ const RideSchema = new mongoose.Schema(
             default: Date.now
         }
     },
-    { strict: true }
+    {strict: true}
 );
 
 module.exports = Ride = mongoose.model("rides", RideSchema);
