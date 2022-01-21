@@ -1,40 +1,43 @@
 const Ride = require("../models/Ride");
+const {getHaversineDistanceM} = require("../utils/location");
 
-const getRides = ((req,res) => {
+const getRides = ((req, res) => {
     return res.send("Read To be implemented")
 })
 
-const getRide = ((req,res) => {
-    Ride.findById(req.params.id, null,null,(err,ride) => {
-            if(err) res.send(err)
-            else res.status(200).json({ result: ride });
-        })
-})
-
-const getRideByStation = ((req,res) => {
-    Ride.findOne({start_station_name: req.params.station},null,{sort: {date: -1}},(err,result) => {
-        if(err) res.send(err)
-        else res.send(result)
+const getRide = ((req, res) => {
+    Ride.findById(req.params.id, null, null, (err, ride) => {
+        if (err) res.send(err)
+        else res.status(200).json({result: ride});
     })
 })
 
-const createRide = ((req,res) => {
+const getRidesByLocation = ((req, res) => {
+    const {radius, location} = req.query
+    Ride.find({ride_status: "Created"}, (err, rides) =>{
+        const result = rides.filter(ride => getHaversineDistanceM(location,ride.start_station_cords) < radius)
+
+       return res.status(200).json({result: result})
+    })
+})
+
+const createRide = ((req, res) => {
     const newRide = new Ride({...req.body})
     newRide.save()
         .then((ride) => {
-            return res.status(200).json({ result: ride });
+            return res.status(200).json({result: ride});
         })
         .catch(err => {
             return console.log(err)
         });
 })
 
-const updateRide = ((req,res) => {
-    Ride.findByIdAndUpdate(req.params.id, {...req.body},{new: true},
-        (err,ride) => {
-        if(err) res.send(err)
-        else res.status(200).json({result: ride })
-    })
+const updateRide = ((req, res) => {
+    Ride.findByIdAndUpdate(req.params.id, {...req.body}, {new: true},
+        (err, ride) => {
+            if (err) res.send(err)
+            else res.status(200).json({result: ride})
+        })
 })
 
-module.exports = {getRides,getRide,createRide,updateRide, getRideByStation}
+module.exports = {getRides, getRide, createRide, updateRide, getRidesByLocation}
