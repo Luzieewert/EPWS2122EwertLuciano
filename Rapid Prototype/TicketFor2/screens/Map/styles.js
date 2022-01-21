@@ -28,12 +28,18 @@ const styles = StyleSheet.create({
     rideSelectionMenu: {
         position: "absolute",
         top: "20%",
-        left: "15%",
+        left: "2.5%",
         backgroundColor: "black",
-        padding: 10,
+        paddingHorizontal: 10,
         borderRadius: 5,
-        width: "70%",
-        height: "50%"
+        height: "50%",
+        width: "95%",
+    },
+    rideSelectionMenuInnerContainer: {
+        flex:1,
+        marginTop: 30,
+        marginBottom: 20,
+        justifyContent: "center"
     },
     rideSelectionMenuButton: {
         marginVertical: 4,
@@ -50,27 +56,26 @@ const styles = StyleSheet.create({
     },
     rideSelectionMenuCreationBtn: {
         ...button.base,
+        ...border.base,
         borderColor: "#fff",
+        alignSelf: "center"
     },
     rideSelectionMenuCreationBtnText: {
         ...text.inButton,
         fontSize: 18
     },
-    scrollContainer: {
-        padding: 4
-    },
 
-    lineSelector: {
+    departureSelector: {
         marginTop: 10,
         padding: 4
     },
 
-    lineSelectorText: {
+    departureSelectorText: {
         ...text.inButton,
         marginBottom: 7
     },
 
-    lineSelectorButton: {
+    departureSelectorButton: {
         ...button.base,
         marginVertical: 4,
         borderWidth: 1,
@@ -86,7 +91,8 @@ const styles = StyleSheet.create({
         width: 22,
         height: 22,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        flex:1
     },
     rideConfirmationContainer: {
         position: "absolute",
@@ -112,8 +118,14 @@ const styles = StyleSheet.create({
         marginHorizontal: 4,
         borderWidth: 1,
         borderColor: "white",
+    },
+    mapActionButton: {
+        position: "absolute",
+        top: 10,
+        left: 10,
+        ...button.base,
+        ...border.base
     }
-
 
 });
 

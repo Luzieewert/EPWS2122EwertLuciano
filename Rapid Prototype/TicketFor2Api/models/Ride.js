@@ -2,6 +2,14 @@ const mongoose = require("mongoose");
 
 const RideSchema = new mongoose.Schema(
     {
+        lineName: {
+            type: String
+        },
+
+        direction: {
+            type: String
+        },
+
         start_station_name: {
             type: String
         },
@@ -20,7 +28,7 @@ const RideSchema = new mongoose.Schema(
         },
 
         ride_start: {
-            type: Date
+            type: String
         },
 
         ride_end: {
