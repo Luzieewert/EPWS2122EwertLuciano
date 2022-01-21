@@ -15,7 +15,7 @@ const getRide = ((req, res) => {
 const getRidesByLocation = ((req, res) => {
     const {radius, location} = req.query
     Ride.find({ride_status: "Created"}, (err, rides) =>{
-        const result = rides.filter(ride => getHaversineDistanceM(location,ride.start_station_cords) < radius)
+        const result = rides.filter(ride => getHaversineDistanceM(JSON.parse(location),ride.start_station_cords) < radius)
 
        return res.status(200).json({result: result})
     })

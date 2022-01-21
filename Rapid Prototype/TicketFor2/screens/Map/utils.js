@@ -12,7 +12,7 @@ export const renderMarkers = (markers, onCalloutPress) => {
             onCalloutPress={() => onCalloutPress(marker)}
             key={index}
             coordinate={marker.start_station_cords}
-            title={marker.start_station_name}/>
+            title={marker.name}/>
     })
 }
 

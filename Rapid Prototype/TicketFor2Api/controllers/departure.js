@@ -20,7 +20,7 @@ const getDeparturesInLocation = async (req, res) => {
         const response = await axios.get(url)
         const result = response.data.boards.map(item => {
             return {
-                start_station_name: item.place.name,
+                name: item.place.name,
                 start_station_cords: {
                     latitude: item.place.location.lat,
                     longitude: item.place.location.lng,

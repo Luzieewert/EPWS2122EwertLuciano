@@ -15,7 +15,6 @@ const EndStationSelector = ({lineName, start_station_name, direction, selectEndS
 
 
     if(!stations) return null
-
     return (
         <ScrollView>
             <Text style={text.inButton}>Bitte wählen sie Ihre Endstation</Text>
