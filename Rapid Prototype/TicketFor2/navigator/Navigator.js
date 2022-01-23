@@ -6,7 +6,7 @@ import MapScreen from "../screens/Map/MapScreen";
 import RideScreen from "../screens/ride/RideScreen";
 import RegistrationScreen from "../screens/registration/RegistrationScreen";
 import PlaceholderScreen from "../screens/placeholder/PlaceholderScreen";
-import ChatScreenFallback from "../screens/chat/ChatScreenFallback";
+import ChatScreen from "../screens/chat/ChatScreen";
 import PostRideScreen from "../screens/post-ride/PostRideScreen";
 import ModeSelectionScreen from "../screens/mode-selection/ModeSelectionScreen";
 
@@ -66,8 +66,8 @@ const Navigator = () => {
                     title: 'Chat',
                     headerTitleAlign: 'center',
                 }}
-                name="ChatFallback"
-                component={ChatScreenFallback}
+                name="Chat"
+                component={ChatScreen}
             />
 
             <Stack.Screen
