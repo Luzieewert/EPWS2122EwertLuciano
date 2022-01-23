@@ -35,7 +35,7 @@ const RideScreen = ({route}) => {
 
     return (
         <View style={styles.container}>
-            <GenericButton onPress={navigation.navigate("ChatFallback")} buttonStyle={styles.button}
+            <GenericButton onPress={()=>navigation.navigate("ChatFallback")} buttonStyle={styles.button}
                            textStyle={text.inButton}
                            buttonText="Chat"/>
             {mode === "Creator" &&
