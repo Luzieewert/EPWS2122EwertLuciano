@@ -8,6 +8,7 @@ import styles from "./styles";
 import text from "../../theme/text";
 import {handleGet, handlePut} from "../../utils/databaseInteraction";
 import {urls} from "../../utils/urls";
+import {createChat} from "./utils";
 
 const RideScreen = ({route}) => {
     const [ride, setRide] = useContext(RideContext)
@@ -26,6 +27,13 @@ const RideScreen = ({route}) => {
 
 
     useEffect(() => {
+        if (mode === "Creator") {
+            createChat(ride._id, null)
+        }
+    }, [])
+
+
+    useEffect(() => {
         const handle = setInterval(() => handleGet(urls.ride + ride._id, updateRideCallback), 5000)
         return () => {
             clearInterval(handle)
@@ -35,7 +43,7 @@ const RideScreen = ({route}) => {
 
     return (
         <View style={styles.container}>
-            <GenericButton onPress={navigation.navigate("ChatFallback")} buttonStyle={styles.button}
+            <GenericButton onPress={() => navigation.navigate("Chat")} buttonStyle={styles.button}
                            textStyle={text.inButton}
                            buttonText="Chat"/>
             {mode === "Creator" &&

@@ -5,5 +5,6 @@ export const urls = {
     ride: "http://localhost:8001/TicketFor2/ride/",
     departures: "http://localhost:8001/TicketFor2/departures",
     linePath: "http://localhost:8001/TicketFor2/line-path/",
-    ridesByLocation: "http://localhost:8001/TicketFor2/ridesByLocation"
+    ridesByLocation: "http://localhost:8001/TicketFor2/ridesByLocation",
+    chat: "http://localhost:8001/TicketFor2/chat/"
 }
