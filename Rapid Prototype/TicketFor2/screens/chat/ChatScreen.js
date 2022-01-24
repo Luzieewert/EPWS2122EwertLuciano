@@ -22,12 +22,12 @@ const ChatScreen = () => {
         return () => {
             clearInterval(handle)
         }
-    }, [messages])
-
+    }, [messages, ride._id])
+    if (!user) return null
     return (
         <GiftedChat
             messages={messages}
-            onSend={messages => handleMessageSend(ride,messages, setMessages)}
+            onSend={messages => handleMessageSend(ride, messages, setMessages)}
             user={{
                 _id: user._id,
                 name: user.name,

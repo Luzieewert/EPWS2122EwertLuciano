@@ -29,7 +29,7 @@ const Map = ({
                 ref={map}
                 style={styles.map}
                 showsUserLocation={true}
-                onUserLocationChange={(event) => onUserLocationChange(event, map, onUserLocationCallback, location, initialRender, setInitialRender,rideScreen,ride,setRide,user)}
+                onUserLocationChange={(event) => onUserLocationChange(event, map, onUserLocationCallback, location, initialRender, setInitialRender, rideScreen, ride, user)}
             >
                 {renderObjects && !isRide ? renderMarkers(renderObjects, onRenderObjectsCalloutPress) : renderCurrentRideMarker(ride, onCurrentRideCalloutPress)}
                 {otherUser && renderOtherUser(otherUser)}

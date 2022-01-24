@@ -2,8 +2,8 @@ import axios from "axios";
 
 export const genericFunction = () => null
 
-export const handleGet = async (url,params = null, callback = genericFunction) => {
-    await axios.get(url,{params: params})
+export const handleGet = async (url, params = null, callback = genericFunction) => {
+    await axios.get(url, {params: params})
         .then((res) => {
             callback(res.data.result)
         })

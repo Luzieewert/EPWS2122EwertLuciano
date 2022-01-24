@@ -8,9 +8,8 @@ import styles from "./styles";
 import text from "../../theme/text";
 import {handleGet, handlePut} from "../../utils/databaseInteraction";
 import {urls} from "../../utils/urls";
-import {createChat} from "./utils";
+import {getOrCreateRideObjects} from "./utils";
 import {getHaversineDistanceM} from "../../utils/location";
-import {getOtherUser} from "../Map/utils";
 import Map from "../Map/Map";
 
 const RideScreen = ({route}) => {
@@ -19,28 +18,8 @@ const RideScreen = ({route}) => {
     const {mode} = route.params
     const navigation = useNavigation()
     const [location, setLocation] = useState({})
-    const showRideStart = ride.ride_status === "Started" && mode === "Creator"
-
-
-    const updateRideCallback = (res) => {
-        const newRide = res
-        setRide(newRide)
-        const usersSeparated = newRide.ride_status === "Progress" && getHaversineDistanceM(newRide.ride_giver.location, newRide.ride_taker.location) > 100
-
-        if (newRide.ride_status === "Completed" || usersSeparated) {
-            navigation.reset({index: 0, routes: [{name: 'PostRide'}]})
-        }
-    }
-
-
-    useEffect(() => {
-        if (mode === "Creator") createChat(ride._id, null)
-
-        const handle = setInterval(() => handleGet(urls.ride + ride._id, null, updateRideCallback), 5000)
-        return () => {
-            clearInterval(handle)
-        }
-    }, [])
+    const [otherUser, setOtherUser] = useState({})
+    const isRide = Object.keys(ride).length > 0
 
     const endRideCallback = () => {
         navigation.reset({
@@ -49,10 +28,41 @@ const RideScreen = ({route}) => {
         })
     }
 
+    const updateRideCallback = (res) => {
+        const newRide = res
+        setRide(newRide)
+        if (newRide.ride_status === "Completed") {
+            handlePut(urls.ride + ride._id, {ride_status: "Completed"}, endRideCallback)
+        }
+    }
+
+    const updateOtherUserCallback = (res) => {
+        const key = user._id === ride.ride_giver._id ? "ride_taker" : "ride_giver"
+        setOtherUser(res[key])
+
+        const usersSeparated = ride.ride_status === "Progress" && getHaversineDistanceM(res.ride_giver.location, res.ride_taker.location) > 100
+        if (usersSeparated) {
+            handlePut(urls.ride + ride._id, {ride_status: "Completed"}, updateRideCallback)
+        }
+    }
+
+    useEffect(() => {
+        if (mode === "Creator" && ride._id) getOrCreateRideObjects(ride._id, null, setOtherUser)
+        const handleRide = setInterval(() => handleGet(urls.ride + ride._id, null, updateRideCallback), 5000)
+        const handleLocations = setInterval(() => handleGet(urls.rideLocations + ride._id, null, updateOtherUserCallback), 5000)
+        return () => {
+            clearInterval(handleLocations)
+            clearInterval(handleRide)
+        }
+    }, [ride._id,ride.ride_status])
+
+    if (!isRide) return null
+    const showRideStart = ride.ride_status === "Started" && mode === "Creator"
+
     return (
         <>
             <Map onUserLocationCallback={setLocation} location={location} rideScreen
-                 otherUser={getOtherUser(ride, user)}/>
+                 otherUser={otherUser} setOtherUser={setOtherUser}/>
             <View style={styles.container}>
 
                 {showRideStart && <GenericButton

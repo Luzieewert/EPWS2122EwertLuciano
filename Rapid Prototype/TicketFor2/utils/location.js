@@ -104,23 +104,23 @@ export const getHaversineDistanceM = (location1, location2) => {
     return (RADIUS_OF_EARTH_IN_KM * c) * 1000;
 };
 
-const saveLocationInRideUser = async (user, location, ride ,setRide) => {
+const updateUsersLocation = async (user, location, ride) => {
     try {
         const key = user._id === ride.ride_giver._id ? "ride_giver" : "ride_taker"
-        await handlePut(urls.ride + ride._id,{[key]: {...user,location: location }},setRide)
+        await handlePut(urls.rideLocations + ride._id,{[key]: {...user,location}},null)
     } catch (err) {
         console.error(err)
     }
 }
 
-export const onUserLocationChange = (event, ref, callback = genericFunction, currentLocation, initialRender, setInitialRender, rideScreen, ride, setRide, user) => {
+export const onUserLocationChange = (event, ref, callback = genericFunction, currentLocation, initialRender, setInitialRender, rideScreen, ride, user) => {
     const location = {
         ...deltas,
         latitude: event.nativeEvent.coordinate.latitude,
         longitude: event.nativeEvent.coordinate.longitude
     }
     const locationDifference = getHaversineDistanceM(location, currentLocation)
-    if (rideScreen && locationDifference < 5) saveLocationInRideUser(user, {latitude: location.latitude, longitude:location.longitude }, ride, setRide)
+    if (rideScreen && locationDifference > 5 || rideScreen && initialRender) updateUsersLocation(user, {latitude: location.latitude, longitude:location.longitude }, ride)
     callback(location)
     if(locationDifference < 50 && !initialRender) return null
     ref.current.animateToRegion(location, 1500)

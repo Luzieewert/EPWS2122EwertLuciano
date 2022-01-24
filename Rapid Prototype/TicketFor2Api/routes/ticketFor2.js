@@ -1,9 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const passport = require("passport");
-const {getRides, createRide, updateRide, getRide, getRidesByLocation} = require("../controllers/ride");
+const {getRides, createRide, updateRide, getRide, getRidesByLocation, getRideByUserId} = require("../controllers/ride");
 const {getDeparturesInLocation, getLinePath} = require("../controllers/departure");
 const {getChatByRideId, createChat, updateChatByRideId} = require("../controllers/chat");
+const {getUserById} = require("../controllers/user");
+const {getCurrentRideLocations, createCurrentRideLocations, updateCurrentRideLocations} = require("../controllers/rideUsersLocation");
 
 
 router.post("/signup", (req, res, next) => {
@@ -49,10 +51,14 @@ function isLoggedIn(req, res, next) {
     return res.status(400).json({message: "You need to be logged in"})
 }
 
+// Users
+router.get('/user/:id', getUserById)
+
 // Rides
 
 router.get('/rides', isLoggedIn, getRides);
 router.get('/ride/:id', isLoggedIn, getRide)
+router.get('/rideByUser/:userId', isLoggedIn, getRideByUserId)
 router.get('/ridesByLocation', isLoggedIn, getRidesByLocation)
 router.post('/ride', isLoggedIn, createRide);
 router.put('/ride/:id', isLoggedIn, updateRide);
@@ -65,6 +71,11 @@ router.get('/line-path/:lineName', isLoggedIn, getLinePath)
 router.get('/chat/:rideId', isLoggedIn, getChatByRideId)
 router.post('/chat', isLoggedIn, createChat)
 router.put('/chat/:rideId', isLoggedIn, updateChatByRideId)
+
+// Ride Users Location
+router.get('/rideUsersLocation/:rideId', isLoggedIn, getCurrentRideLocations)
+router.post('/rideUsersLocation', isLoggedIn, createCurrentRideLocations)
+router.put('/rideUsersLocation/:rideId',isLoggedIn, updateCurrentRideLocations)
 
 
 
