@@ -18,7 +18,7 @@ const PostRideScreen = () => {
     }
     return (
         <View style={styles.container}>
-            <Text style={styles.mainText}>Sie haben was gutes getan!, wir wünschen ihnen einen wunderschönen Tag</Text>
+            <Text style={styles.mainText}>Sie haben etwas Gutes getan! Wir wünschen Ihnen einen wunderschönen Tag.</Text>
             <GenericButton buttonText="Zur Karte" buttonStyle={styles.button} textStyle={text.inButton} onPress={handleBackToMap}/>
         </View>
     )
