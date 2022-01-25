@@ -4,6 +4,7 @@ import React from "react";
 export const markerStatus = {
     Created: "blue",
     Pending: "yellow",
+    User: "yellow"
 }
 
 export const renderMarkers = (markers, onCalloutPress) => {
@@ -26,3 +27,16 @@ export const renderCurrentRideMarker = (ride, onCalloutPress) => {
                    pinColor={markerStatus[ride.ride_status]}/>
 }
 
+export const renderOtherUser = (user) => {
+    if(!user.location) return null
+    return <Marker coordinate={{
+        latitude: user.location.latitude,
+        longitude: user.location.longitude,
+    }} pinColor={markerStatus["User"]}
+    title={user.name + " " + user.last_name}
+    />
+}
+
+export const getOtherUser = (ride,user) => {
+    return ride.ride_giver._id === user._id ? ride.ride_taker : ride.ride_giver
+}

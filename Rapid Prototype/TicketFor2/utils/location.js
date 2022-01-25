@@ -1,6 +1,7 @@
 import {Alert, PermissionsAndroid} from "react-native";
 import Geolocation from 'react-native-geolocation-service';
-import {genericFunction} from "./databaseInteraction";
+import {genericFunction, handlePut} from "./databaseInteraction";
+import {urls} from "./urls";
 
 const deltas = {
     latitudeDelta: 0.00375,
@@ -85,7 +86,7 @@ export const stopLocationUpdates = (ref) => {
     }
 }
 
-const getHaversineDistanceM = (location1, location2) => {
+export const getHaversineDistanceM = (location1, location2) => {
     const RADIUS_OF_EARTH_IN_KM = 6371;
     const toRadian = angle => (Math.PI / 180) * angle;
     const distance = (a, b) => (Math.PI / 180) * (a - b);
@@ -103,15 +104,25 @@ const getHaversineDistanceM = (location1, location2) => {
     return (RADIUS_OF_EARTH_IN_KM * c) * 1000;
 };
 
-export const onUserLocationChange = (event, ref, callback = genericFunction, currentLocation, initialRender, setInitialRender) => {
+const saveLocationInRideUser = async (user, location, ride ,setRide) => {
+    try {
+        const key = user._id === ride.ride_giver._id ? "ride_giver" : "ride_taker"
+        await handlePut(urls.ride + ride._id,{[key]: {...user,location: location }},setRide)
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+export const onUserLocationChange = (event, ref, callback = genericFunction, currentLocation, initialRender, setInitialRender, rideScreen, ride, setRide, user) => {
     const location = {
         ...deltas,
         latitude: event.nativeEvent.coordinate.latitude,
         longitude: event.nativeEvent.coordinate.longitude
     }
-    const locationDifference = getHaversineDistanceM(location, currentLocation) > 50
+    const locationDifference = getHaversineDistanceM(location, currentLocation)
+    if (rideScreen && locationDifference < 5) saveLocationInRideUser(user, {latitude: location.latitude, longitude:location.longitude }, ride, setRide)
     callback(location)
-    if(!locationDifference && !initialRender) return null
+    if(locationDifference < 50 && !initialRender) return null
     ref.current.animateToRegion(location, 1500)
     setInitialRender(false)
 }

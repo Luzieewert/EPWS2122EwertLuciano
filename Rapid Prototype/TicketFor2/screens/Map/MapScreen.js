@@ -60,7 +60,7 @@ const MapScreen = ({route}) => {
 
     return (
         <>
-            <Map ride={ride} renderObjects={renderObjects} onUserLocationCallback={setLocation} location={location}
+            <Map renderObjects={renderObjects} onUserLocationCallback={setLocation} location={location}
                  onRenderObjectsCalloutPress={setSelectedElement}
                  onCurrentRideCalloutPress={onCurrentRideCalloutPress}/>
             {selectedElement &&

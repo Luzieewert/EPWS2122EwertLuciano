@@ -9,9 +9,8 @@ import text from "../../theme/text";
 import {handleGet, handlePut} from "../../utils/databaseInteraction";
 import {urls} from "../../utils/urls";
 import {createChat} from "./utils";
-import MapView from "react-native-maps";
-import {onUserLocationChange} from "../../utils/location";
-import {findOtherUser, renderCurrentRideMarker, renderMarkers} from "../Map/utils";
+import {getHaversineDistanceM} from "../../utils/location";
+import {getOtherUser} from "../Map/utils";
 import Map from "../Map/Map";
 
 const RideScreen = ({route}) => {
@@ -19,58 +18,58 @@ const RideScreen = ({route}) => {
     const [user, setUser] = useContext(UserContext)
     const {mode} = route.params
     const navigation = useNavigation()
-    const [renderObjects, setRenderObjects] = useState([])
     const [location, setLocation] = useState({})
+    const showRideStart = ride.ride_status === "Started" && mode === "Creator"
+
 
     const updateRideCallback = (res) => {
         const newRide = res
         setRide(newRide)
+        const usersSeparated = newRide.ride_status === "Progress" && getHaversineDistanceM(newRide.ride_giver.location, newRide.ride_taker.location) > 100
 
-        if (newRide.ride_status === "Completed") {
+        if (newRide.ride_status === "Completed" || usersSeparated) {
             navigation.reset({index: 0, routes: [{name: 'PostRide'}]})
         }
     }
 
 
     useEffect(() => {
-        if (mode === "Creator") {
-            createChat(ride._id, null)
-        }
+        if (mode === "Creator") createChat(ride._id, null)
 
-    }, [])
-
-
-    useEffect(() => {
         const handle = setInterval(() => handleGet(urls.ride + ride._id, null, updateRideCallback), 5000)
         return () => {
             clearInterval(handle)
         }
-    }, [ride])
+    }, [])
 
-    const endRideCallback = (res) => {
+    const endRideCallback = () => {
         navigation.reset({
             index: 0,
             routes: [{name: 'PostRide'}]
-        })}
-
-    const rideStart = ride.ride_status === "Started" && mode === "Creator"
+        })
+    }
 
     return (
         <>
-            <Map ride={ride} renderObjects={renderObjects} onUserLocationCallback={setLocation} location={location} otherUser={findOtherUser(ride)} setRide={setRide} />
-            <View style = {styles.container}>
+            <Map onUserLocationCallback={setLocation} location={location} rideScreen
+                 otherUser={getOtherUser(ride, user)}/>
+            <View style={styles.container}>
 
-                { rideStart && <GenericButton onPress={() => handlePut(urls.ride + ride._id,{ride_status: "Progress"}, updateRideCallback )} buttonStyle={styles.button}
+                {showRideStart && <GenericButton
+                    onPress={() => handlePut(urls.ride + ride._id, {ride_status: "Progress"}, updateRideCallback)}
+                    buttonStyle={styles.button}
+                    textStyle={text.inButton}
+                    buttonText="Fahrt beginnen!"/>}
+
+                <GenericButton onPress={() => navigation.navigate("Chat")} buttonStyle={styles.button}
                                textStyle={text.inButton}
-                               buttonText="Fahrt beginnen!"/>}
+                               buttonText="Chat"/>
 
-            <GenericButton onPress={() => navigation.navigate("Chat")} buttonStyle={styles.button}
-                           textStyle={text.inButton}
-                           buttonText="Chat"/>
-
-                <GenericButton onPress={() => handlePut(urls.ride + ride._id,{ride_status: "Completed"}, endRideCallback )} buttonStyle={styles.button}
-                               textStyle={text.inButton}
-                               buttonText="Fahrt beenden"/>
+                <GenericButton
+                    onPress={() => handlePut(urls.ride + ride._id, {ride_status: "Completed"}, endRideCallback)}
+                    buttonStyle={styles.button}
+                    textStyle={text.inButton}
+                    buttonText="Fahrt beenden"/>
             </View>
         </>
     )
