@@ -12,14 +12,14 @@ const LogOutButton = () => {
     const [user, setUser] = useContext(UserContext)
     const [ride, setRide] = useContext(RideContext)
 
-    const handleLogOutSuccess = () => {
+    const handleLogOutSuccess = (res) => {
         setUser({})
         setRide({})
         navigation.reset({index: 0, routes: [{name: 'Login'}]})
     };
 
     return (
-        <TouchableOpacity onPress={() => handleGet(urls.logOut,handleLogOutSuccess)}>
+        <TouchableOpacity onPress={() => handleGet(urls.logOut,null,handleLogOutSuccess)}>
             <Text>Logout</Text>
         </TouchableOpacity>
     )

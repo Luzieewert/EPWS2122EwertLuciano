@@ -36,7 +36,3 @@ export const renderOtherUser = (user) => {
     title={user.name + " " + user.last_name}
     />
 }
-
-export const getOtherUser = (ride,user) => {
-    return ride.ride_giver._id === user._id ? ride.ride_taker : ride.ride_giver
-}

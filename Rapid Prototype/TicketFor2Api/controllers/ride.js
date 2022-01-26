@@ -12,6 +12,19 @@ const getRide = ((req, res) => {
     })
 })
 
+const getRideByUserId = ((req, res) => {
+    const {userId} = req.params
+    Ride.findOne({
+        ride_status: {$ne: "Completed"},
+        $or: [
+            {"ride_giver._id": userId},
+            {"ride_taker._id": userId},
+        ]}, null, { sort: { date: -1 } }, (err, ride) => {
+        if (err) res.send(err)
+        else res.status(200).json({result: ride});
+    })
+})
+
 const getRidesByLocation = ((req, res) => {
     const {radius, location} = req.query
     Ride.find({ride_status: "Created"}, (err, rides) =>{
@@ -40,4 +53,4 @@ const updateRide = ((req, res) => {
         })
 })
 
-module.exports = {getRides, getRide, createRide, updateRide, getRidesByLocation}
+module.exports = {getRides, getRide, createRide, updateRide, getRidesByLocation, getRideByUserId}

@@ -22,7 +22,7 @@ const updateChatByRideId = (req, res) => {
     const {rideId} = req.params
     try {
         Chat.findOne({rideId: rideId}, null, null, (err, chat) => {
-            chat.messages = [req.body,...chat.messages]
+            chat.messages = [req.body, ...chat.messages]
             chat.save()
             if (err) res.send(err)
             else res.status(200).json({result: chat});

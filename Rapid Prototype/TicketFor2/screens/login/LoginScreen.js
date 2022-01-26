@@ -7,14 +7,17 @@ import styles from "./styles";
 import text from "../../theme/text";
 import {handlePost} from "../../utils/databaseInteraction";
 import {urls} from "../../utils/urls";
+import {setStorageItem} from "../../utils/asyncStorageInteraction";
+
 
 const LoginScreen = () => {
     const navigation = useNavigation();
     const [loginData, setLoginData] = useState({})
     const [user, setUser] = useContext(UserContext)
 
-    const handleLoginSuccess = (res) => {
+    const handleLoginSuccess = async (res) => {
         setUser(res)
+        await setStorageItem("user",res._id)
         navigation.reset({index: 0, routes: [{name: 'ModeSelection'}]})
     }
 
