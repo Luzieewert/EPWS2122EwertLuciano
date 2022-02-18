@@ -1,6 +1,7 @@
 import {Alert, PermissionsAndroid} from "react-native";
 import Geolocation from 'react-native-geolocation-service';
 import {genericFunction, handlePut} from "./databaseInteraction";
+import {urls} from "./urls";
 
 const deltas = {
     latitudeDelta: 0.00375,
@@ -85,7 +86,7 @@ export const stopLocationUpdates = (ref) => {
     }
 }
 
-const getHaversineDistanceM = (location1, location2) => {
+export const getHaversineDistanceM = (location1, location2) => {
     const RADIUS_OF_EARTH_IN_KM = 6371;
     const toRadian = angle => (Math.PI / 180) * angle;
     const distance = (a, b) => (Math.PI / 180) * (a - b);
@@ -103,24 +104,25 @@ const getHaversineDistanceM = (location1, location2) => {
     return (RADIUS_OF_EARTH_IN_KM * c) * 1000;
 };
 
-const addUserLocationToRide = (userID, location, callback) => {
-    callback(prev => {
-        const result = prev.ride_giver._id === userID ? {...prev, ride_giver: {...prev.ride_giver, location: location}} : {...prev, ride_taker: {...prev.ride_taker, location: location}}
-        handlePut(urls.ride, result, null)
-        return prev.ride_giver._id === userID ? {...prev, ride_giver: {...prev.ride_giver, location: location}} : {...prev, ride_taker: {...prev.ride_taker, location: location}}
-    })
+const updateUsersLocation = async (user, location, ride) => {
+    try {
+        const key = user._id === ride.ride_giver._id ? "ride_giver" : "ride_taker"
+        await handlePut(urls.rideLocations + ride._id,{[key]: {...user,location}},null)
+    } catch (err) {
+        console.error(err)
+    }
 }
 
-export const onUserLocationChange = (event, ref, callback = genericFunction, currentLocation, initialRender, setInitialRender, ride, setRide, userID) => {
+export const onUserLocationChange = (event, ref, callback = genericFunction, currentLocation, initialRender, setInitialRender, rideScreen, ride, user) => {
     const location = {
         ...deltas,
         latitude: event.nativeEvent.coordinate.latitude,
         longitude: event.nativeEvent.coordinate.longitude
     }
-    const locationDifference = getHaversineDistanceM(location, currentLocation) > 50
+    const locationDifference = getHaversineDistanceM(location, currentLocation)
+    if (rideScreen && locationDifference > 5 || rideScreen && initialRender) updateUsersLocation(user, {latitude: location.latitude, longitude:location.longitude }, ride)
     callback(location)
-    if(ride.ride_status === "Started" || ride.ride_status === "Progress") return addUserLocationToRide(userID, {latitude: location.latitude, longitude: location.longitude}, setRide )
-    if(!locationDifference && !initialRender) return null
+    if(locationDifference < 50 && !initialRender) return null
     ref.current.animateToRegion(location, 1500)
     setInitialRender(false)
 }

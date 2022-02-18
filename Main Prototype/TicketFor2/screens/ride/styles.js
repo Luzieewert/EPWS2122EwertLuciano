@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
         width: "40%",
         marginVertical: 4
     },
-
 });
 
 export default styles
