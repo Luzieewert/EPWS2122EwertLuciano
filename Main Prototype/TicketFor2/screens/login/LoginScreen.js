@@ -8,6 +8,7 @@ import text from "../../theme/text";
 import {handlePost} from "../../utils/databaseInteraction";
 import {urls} from "../../utils/urls";
 import {setStorageItem} from "../../utils/asyncStorageInteraction";
+import modeSelection from "../mode-selection/ModeSelection";
 
 
 const LoginScreen = () => {
@@ -18,7 +19,7 @@ const LoginScreen = () => {
     const handleLoginSuccess = async (res) => {
         setUser(res)
         await setStorageItem("user",res._id)
-        navigation.reset({index: 0, routes: [{name: 'ModeSelection'}]})
+        res.has_ticket ? navigation.reset({index: 0, routes: [{name: 'ModeSelection'}]}) : navigation.reset({index: 0, routes: [{name: 'Map', params: {mode: "Searcher"}}]})
     }
 
     return (

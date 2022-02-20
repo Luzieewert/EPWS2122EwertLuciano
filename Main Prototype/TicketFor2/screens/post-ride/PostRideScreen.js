@@ -14,7 +14,7 @@ const PostRideScreen = () => {
 
     const handleBackToMap = () => {
         setRide({})
-        navigation.reset({index: 0, routes: [{name: 'ModeSelection'}]})
+        user.has_ticket ? navigation.reset({index: 0, routes: [{name: 'ModeSelection'}]}) : navigation.reset({index: 0, routes: [{name: 'Map', params: {mode: "Searcher"}}]})
     }
     return (
         <View style={styles.container}>
