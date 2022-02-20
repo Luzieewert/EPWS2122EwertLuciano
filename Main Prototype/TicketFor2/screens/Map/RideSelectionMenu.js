@@ -29,7 +29,8 @@ const RideSelectionMenu = ({isCreator, selectedElement, setSelectedElement}) => 
             lineName: departure.name,
             direction: departure.direction,
             start_station_cords: selectedElement.start_station_cords,
-            ride_start: departure.time
+            ride_start: departure.time,
+            start_station_name: selectedElement.name
         })
         setSelectedDeparture(departure)
         setStep(2)
@@ -71,7 +72,7 @@ const RideSelectionMenu = ({isCreator, selectedElement, setSelectedElement}) => 
         return {
             lineName: isCreator ? departure.name : selectedElement.lineName,
             direction: isCreator ? departure.direction : selectedElement.direction,
-            start_station_name: selectedElement.name,
+            start_station_name: isCreator ? selectedElement.name : selectedElement.start_station_name,
             selectEndStation: selectEndStation
         }
     }
