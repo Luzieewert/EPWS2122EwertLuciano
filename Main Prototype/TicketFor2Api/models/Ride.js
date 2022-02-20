@@ -18,6 +18,9 @@ const RideSchema = new mongoose.Schema(
             type: Object
         },
 
+        start_station_name: {
+            type: String
+        },
 
         end_station_name: {
             type: String

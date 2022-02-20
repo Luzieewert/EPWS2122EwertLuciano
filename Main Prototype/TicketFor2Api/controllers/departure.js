@@ -37,21 +37,41 @@ const getDeparturesInLocation = async (req, res) => {
 }
 
 const getLinePath = async (req, res) => {
-    const {lineName} = req.params
+    //const {lineName} = req.params
     const {start_station_name, direction} = req.query
+    const stations = [
+        "Sparkasse Am Butzweilerhof",
+        "IKEA Am Butzweilerhof" ,
+    "Alter Flughafen Butzweilerhof" ,
+    "Rektor-Klein-Str." ,
+    "Margaretastr." ,
+    "Iltisstr./Äußere Kanalstr." ,
+    "Lenauplatz" ,
+    "Nußbaumerstr." ,
+    "Subbelrather Str./Gürtel" ,
+    "Liebigstr." ,
+    "Gutenbergstr.",
+    "Hans-Böckler-Platz/Bf West" ,
+    "Friesenplatz" ,
+    "Appellhofplatz" ,
+    "Dom/Hbf" ,
+    "Köln Rathaus" ,
+    "Heumarkt"]
 
     try {
-        const url = `${urls.linePath}${lineName}`
-        const response = await axios.get(url)
-        const startIndex = response.data.indexOf(start_station_name)
-        const endIndex = response.data.indexOf(direction)
+        /*const url = `${urls.linePath}${lineName}`
+        const response = await axios.get(url)*/
+        //const startIndex = response.data.indexOf(start_station_name)
+        //const endIndex = response.data.indexOf(direction)
+        const startIndex = stations.indexOf(start_station_name)
+        const endIndex = stations.indexOf(direction)
 
         const getProperOrder = (startIndex, endIndex) => {
             if(startIndex > endIndex) return [endIndex, startIndex]
             return [startIndex !== -1 ? startIndex + 1 : startIndex, endIndex !== -1 ? endIndex + 1 : endIndex]
         }
-        const result = response.data.slice(...getProperOrder(startIndex, endIndex))
-        return res.status(200).json({result: result.length ? result : response.data})
+        const result = stations.slice(...getProperOrder(startIndex, endIndex))
+        return res.status(200).json({result: result.length ? result : null})
 
     } catch (err) {
         console.error(err)

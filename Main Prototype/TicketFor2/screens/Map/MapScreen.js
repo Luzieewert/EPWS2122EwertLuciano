@@ -22,7 +22,7 @@ const MapScreen = ({route}) => {
     const isRide = Object.keys(ride).length > 0
     const {mode} = route.params
     const isCreator = mode === "Creator"
-    const actionBtnText = isCreator ? "Farht Erstellen" : "Farht Suchen"
+    const actionBtnText = isCreator ? "Fahrt Erstellen" : "Fahrt Suchen"
 
     useEffect(() => {
         if (isRide) {
